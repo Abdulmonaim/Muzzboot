@@ -21,6 +21,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+    path('', include('e_commerce.urls')),
+    path('token_register', obtain_auth_token),
 ]
 
 
