@@ -47,7 +47,7 @@ class Register (generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response({
-        "user": User_serializer(user, context=self.get_serializer_context()).data,})
+        "user": Register_Serializer(user, context=self.get_serializer_context()).data,})
 
 
 
