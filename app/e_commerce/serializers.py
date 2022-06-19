@@ -1,3 +1,4 @@
+from pyexpat import model
 from rest_framework import serializers
 from e_commerce import models
 
@@ -26,3 +27,54 @@ class Register_Serializer(serializers.ModelSerializer):
         )
 
         return user
+
+
+
+class Product_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Product
+        fields = '__all__'
+
+
+
+class Review_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Review
+        fields = '__all__'
+
+
+class Category_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Category
+        fields = '__all__'
+
+
+class Cart_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Cart
+        fields = '__all__'
+
+
+class Cart_item_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Cart_item
+        fields = '__all__'
+
+
+class Images_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Images
+        fields = '__all__'
+
+
+class Color_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Color
+        fields = '__all__'
+
+
+class Size_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Size
+        fields = '__all__'
+

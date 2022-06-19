@@ -1,0 +1,111 @@
+-main page :
+
+    1- filter : (woman , men )
+    2 - navigation bar :
+        all clothing بيتحط فيها كل حاجه  
+        size
+        search
+        cart
+        sign in (email, pass)
+
+    3- products 
+
+
+- register:
+
+    password
+    email 
+    first name
+    last name 
+    date of birth
+    country
+    mobile
+    government
+    address
+
+
+
+-category: 
+
+    men , woman  :
+       categories:
+         
+        products: photo , title , price 
+
+        sorting :
+             1- recomdation 
+             2 price (from cheap to expensive and vice verce)
+                ناتج البحث او التصنيف :  photo , title , price
+        
+        filter :
+            size
+            color
+            category
+            price
+            brand
+
+
+-product quick view :
+
+    title
+    color
+    size
+    add to cart
+    what is my size and size guide (link)
+    instock indecator
+
+
+-cart :
+
+    title
+    photo
+    size
+    quantity
+    price
+    order total
+    charge service
+    edit button:
+        color 
+        size
+        quntity
+
+
+
+- checkout :
+
+    order summery:
+        cart 
+        shipping:
+            shipping address
+            name
+            mobile
+            change button
+
+    
+     order tottal 
+     proceed to pilling
+     payment method
+
+    
+
+- product:
+
+    details
+    title
+    color
+    size
+    price 
+    discount
+    add to cart
+    what is my size and size guide (link)
+    instock indecator
+    recommendition 
+    review:
+        rating
+        content
+        
+
+    
+- footer from link  : https://us.boohoo.com/
+
+

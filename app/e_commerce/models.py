@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
@@ -9,46 +10,28 @@ from django.contrib.auth.models import PermissionsMixin
 
 
 class Product (models.Model):
-    Product_name = models.CharField(max_length=75)
-    Product_meta_title = models.CharField(max_length=100)
-    Product_description = models.CharField(max_length=100)
-    Product_shop = models.CharField(max_length=40)
-    Product_content = models.TextField()
-    Product_purchase_price = models.DecimalField(max_digits=5, decimal_places=2)
+    Product_title = models.CharField(max_length=100)
+    Product_details = models.TextField()
+    Product_price = models.DecimalField(max_digits=5, decimal_places=2)
     Product_discount = models.DecimalField(max_digits=5, decimal_places=2)
-    Product_sale_price = models.DecimalField(max_digits=5, decimal_places=2)
-    Product_quantity = models.IntegerField()
-    # Product_active = models.BooleanField()
-    Product_brand = models.ForeignKey('brand', on_delete=models.CASCADE, blank=True, null=True)
-    Product_type_product = models.ManyToManyField('Product_type')
-    Category_product = models.ManyToManyField('Category')
-    product_user = models.ManyToManyField('User')
-
-
+    Product_is_active = models.BooleanField(default=True)
+    Product_brand = models.CharField(max_length=75)
+    Product_category = models.ManyToManyField('Category')
+    Product_user = models.ManyToManyField('User')
 
     def __str__(self): 
-        return self.Product_name
+        return self.Product_title
 
 
-class Product_type (models.Model):
-    Product_type_name = models.CharField(max_length=75)
-    Product_type_description = models.CharField(max_length=100)
-    # Product_type_active = models.BooleanField()
 
-
-    def __str__(self): 
-        return self.Product_type_name
-
-
-class Product_review (models.Model):
-    Product_review_name = models.CharField(max_length=75)
-    Product_review_ratin = models.SmallIntegerField()
-    Product_review_content = models.TextField()
-    # Product_review_active = models.BooleanField()
-    Product_review_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+class Review (models.Model):
+    Review_rating = models.SmallIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    Review_content = models.TextField()
+    Review_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    Review_user = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True )
 
     def __str__(self): 
-        return self.Product_review_name
+        return self.Review_user
 
 
 
@@ -78,117 +61,79 @@ class UserProfileManager(BaseUserManager):
         return user
 
 
-
-
-
 class User (AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     name = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=255, unique=True)
     mobile = models.CharField(max_length=15)
-    gender = models.BooleanField(default=True)
+    address = models.CharField(max_length=75)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_vendor = models.BooleanField(default=False)
-
+    # is_vendor = models.BooleanField(default=False)
 
     objects = UserProfileManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
 
-
-
-
-
     def __str__(self): 
         return self.name
-
-# class account (models.Model):
-#     account_name = models.CharField(max_length=50)   
-#     account_password = models.CharField(max_length=32)
-#     account_hint_question = models.CharField(max_length=32)
-#     account_answer = models.CharField(max_length=32)
-#     # account_active = models.BooleanField()
-#     account_user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-
-    # def __str__(self): 
-    #     return self.account_name
 
 
 
 class Category (models.Model):
-    Category_name = models.CharField(max_length=75)
-    Category_meta_title = models.CharField(max_length=100)
+    Category_title = models.CharField(max_length=75)
+    Category_gender = models.BooleanField(default=True)
     Category_description = models.CharField(max_length=100)
-    Category_content = models.TextField()
-    # Category_active = models.BooleanField()
-    Category_parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
+    Category_is_active = models.BooleanField(default=True)
 
     def __str__(self): 
-        return self.Category_name
+        return self.Category_title
 
 
-class Order (models.Model):
-    Order_first_name = models.CharField(max_length=50)
-    Order_middle_name = models.CharField(max_length=50)
-    Order_last_name = models.CharField(max_length=50)
-    Order_email = models.EmailField(max_length=255, unique=True)
-    Order_mobile = models.CharField(max_length=15)
-    Order_token = models.CharField(max_length=100)
-    Order_description = models.CharField(max_length=100)
-    Order_discount = models.DecimalField(max_digits=5, decimal_places=2)
-    Order_item_discount = models.DecimalField(max_digits=5, decimal_places=2)
-    Order_sub_total = models.DecimalField(max_digits=5, decimal_places=2)
-    Order_total = models.DecimalField(max_digits=5, decimal_places=2)
-    Order_grand_total = models.DecimalField(max_digits=5, decimal_places=2)
-    # Order_active = models.BooleanField()
-    Order_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+class Cart (models.Model):
+    Cart_first_name = models.CharField(max_length=50)
+    Cart_last_name = models.CharField(max_length=50)
+    Cart_email = models.EmailField(max_length=255, unique=True)
+    Cart_mobile = models.CharField(max_length=15)
+    Cart_total = models.DecimalField(max_digits=5, decimal_places=2)
+    Cart_shipping = models.DecimalField(max_digits=5, decimal_places=2)
+    Cart_grand_total = models.DecimalField(max_digits=5, decimal_places=2)
+    Cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    cart_product = models.ManyToManyField('Cart_item')
 
+    def __str__(self): 
+        return self.Cart_first_name
+
+
+
+class Cart_item (models.Model):
+    Cart_item_title = models.CharField(max_length=75)
+    Cart_item_photo = models.ImageField()
+    Cart_item_size = models.CharField(max_length=7)
+    Cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
+    Cart_item_quntity = models.IntegerField()
+    Cart_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    Cart_item_image = models.ForeignKey('Images', on_delete=models.CASCADE, blank=True, null=True)
     
-
     def __str__(self): 
-        return self.Order_first_name
+        return self.Cart_item_title
 
 
-class Order_item (models.Model):
-    Order_item_content = models.TextField()
-    Order_item_price = models.DecimalField(max_digits=5, decimal_places=2)
-    Order_item_discount = models.DecimalField(max_digits=5, decimal_places=2)
-    Product_quantity = models.IntegerField()
-    Order_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    Order_item_order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
+# class Transaction (models.Model):
+#     Transaction_code = models.CharField(max_length=100)
+#     Transaction_content = models.TextField()
+#     Transaction_type = models.SmallIntegerField()
+#     Transaction_mode = models.SmallIntegerField()
+#     Transaction_status = models.SmallIntegerField()
+#     Transaction_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+#     Transaction_order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
 
 
-    def __str__(self): 
-        return str(self.Order_item_price)
+#     def __str__(self): 
+#         return self.Transaction_content
 
-
-class Transaction (models.Model):
-    Transaction_code = models.CharField(max_length=100)
-    Transaction_content = models.TextField()
-    Transaction_type = models.SmallIntegerField()
-    Transaction_mode = models.SmallIntegerField()
-    Transaction_status = models.SmallIntegerField()
-    Transaction_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    Transaction_order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
-
-
-    def __str__(self): 
-        return self.Transaction_content
-
-
-
-class Brand (models.Model):
-    Brand_name = models.CharField(max_length=75)
-    Brand_logo = models.CharField(max_length=75)
-    Brand_description = models.CharField(max_length=100)
-    # Brand_active = models.BooleanField()
-
-    def __str__(self): 
-        return self.Brand_name
 
 
 class Images (models.Model):
@@ -202,14 +147,8 @@ class Color (models.Model):
     Color_product = models.ManyToManyField(Product)
 
 class Size (models.Model):
-    size = models.FloatField()
+    size_name = models.CharField(max_length=7)
+    size_quantity = models.IntegerField()
     Size_product = models.ManyToManyField(Product)
 
 
-class Address (models.Model):
-    Address_address = models.CharField(max_length=50)
-    Address_zipcode = models.CharField(max_length=50)
-    Address_active = models.BooleanField()
-    Address_user = models.ManyToManyField(User)
-
-    

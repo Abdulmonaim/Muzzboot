@@ -26,3 +26,45 @@ class RegisterViewSet(viewsets.ModelViewSet):
 class UserLoginApiView(ObtainAuthToken):
     """Handle creating user authentication tokens"""
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+
+
+
+class Product_ViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.Product_serializer
+    queryset = models.Product.objects.all()
+
+
+class Review_ViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.Review_serializer
+    queryset = models.Review.objects.all()
+
+
+class Category_ViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.Category_serializer
+    queryset = models.Category.objects.all()
+
+
+class Cart_ViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.Cart_serializer
+    queryset = models.Cart.objects.all()
+
+
+class Cart_item_ViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.Cart_item_serializer
+    queryset = models.Cart_item.objects.all()
+
+
+class Images_ViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.Images_serializer
+    queryset = models.Images.objects.all()
+
+
+class Color_ViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.Color_serializer
+    queryset = models.Color.objects.all()
+
+
+class Size_ViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.Size_serializer
+    queryset = models.Size.objects.all()
