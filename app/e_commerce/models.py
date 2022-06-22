@@ -18,6 +18,10 @@ class Product (models.Model):
     Product_brand = models.CharField(max_length=75)
     Product_category = models.ManyToManyField('Category')
     Product_user = models.ManyToManyField('User')
+    product_color = models.ManyToManyField('Color')
+    product_size = models.ManyToManyField('Size')
+
+
 
     def __str__(self): 
         return self.Product_title
@@ -116,6 +120,9 @@ class Cart_item (models.Model):
     Cart_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     Cart_item_image = models.ForeignKey('Images', on_delete=models.CASCADE, blank=True, null=True)
     
+    
+    
+    
     def __str__(self): 
         return self.Cart_item_title
 
@@ -140,14 +147,23 @@ class Images (models.Model):
     Images_product = models.ForeignKey(Product, on_delete=models.CASCADE)
     Images_category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+    def __str__(self): 
+        return self.Images_img
+
+
 
 class Color (models.Model):
     Color_name = models.CharField(max_length=75)
-    Color_product = models.ManyToManyField(Product)
+
+    def __str__(self): 
+        return self.Color_name
+
 
 class Size (models.Model):
     size_name = models.CharField(max_length=7)
     size_quantity = models.IntegerField()
-    Size_product = models.ManyToManyField(Product)
+
+    def __str__(self): 
+        return self.size_name
 
 
