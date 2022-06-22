@@ -1,10 +1,12 @@
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status, filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -29,22 +31,30 @@ class UserLoginApiView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
-class ModelViewSet(mixins.CreateModelMixin, 
-                   mixins.RetrieveModelMixin, 
-                   mixins.UpdateModelMixin,
-                   mixins.DestroyModelMixin,
-                   mixins.ListModelMixin,
-                   GenericViewSet)
+# class ModelViewSet(mixins.CreateModelMixin, 
+#                    mixins.RetrieveModelMixin, 
+#                    mixins.UpdateModelMixin,
+#                    mixins.DestroyModelMixin,
+#                    mixins.ListModelMixin,
+#                    GenericViewSet)
 
 class Product_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Product_serializer
     queryset = models.Product.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAdminUser,)
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     search_fields = ['Product_title']
     filterset_fields = ['Product_price', 'Product_brand', 'Product_category', 'product_color', 'product_size']
     ordering_fields = ['Product_price']
+
+    def get_permissions(self):
+
+        if self.action == 'retrieve' or self.action == 'list':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
 
 
 class Review_ViewSet(viewsets.ModelViewSet):
