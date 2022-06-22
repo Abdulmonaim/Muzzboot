@@ -1,12 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins, status, filters
 from rest_framework.authentication import TokenAuthentication
-from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from e_commerce import serializers
 from e_commerce import models
@@ -18,7 +16,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Register_Serializer
     queryset = models.User.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.UpdateOwnProfile,)
+    permission_classes = (permissions.UpdateOwnProfile, IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email',)
 
@@ -28,16 +26,28 @@ class UserLoginApiView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
-
+class ModelViewSet(mixins.CreateModelMixin, 
+                   mixins.RetrieveModelMixin, 
+                   mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
+                   mixins.ListModelMixin,
+                   GenericViewSet)
 
 class Product_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Product_serializer
     queryset = models.Product.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAdminUser,)
+
+    
+    
 
 
 class Review_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Review_serializer
     queryset = models.Review.objects.all()
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (permissions.UpdateOwnProfile,)
 
 
 class Category_ViewSet(viewsets.ModelViewSet):
@@ -48,11 +58,15 @@ class Category_ViewSet(viewsets.ModelViewSet):
 class Cart_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Cart_serializer
     queryset = models.Cart.objects.all()
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (permissions.UpdateOwnProfile,)
 
 
 class Cart_item_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Cart_item_serializer
     queryset = models.Cart_item.objects.all()
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (permissions.UpdateOwnProfile,)
 
 
 class Images_ViewSet(viewsets.ModelViewSet):

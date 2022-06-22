@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register('register', views.RegisterViewSet)
 router.register('product', views.Product_ViewSet)
-router.register('review', views.RegisterViewSet)
+router.register('review', views.Review_ViewSet)
 router.register('category', views.Category_ViewSet)
 router.register('cart', views.Cart_item_ViewSet)
 router.register('cart_item', views.Cart_item_ViewSet)

@@ -43,7 +43,6 @@ class UserProfileManager(BaseUserManager):
             raise ValueError('User must have an email address')
 
         email = self.normalize_email(email)
-        # password =  make_password(password, 'qwertyuiop','md5')
         user = self.model(email=email, name=name, password=password)
         user.set_password(password)
         user.save(using=self._db)
