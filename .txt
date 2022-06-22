@@ -35,7 +35,7 @@
         sorting :
              1- recomdation 
              2 price (from cheap to expensive and vice verce)
-                ناتج البحث او التصنيف :  photo , title , price
+                ناتج البحث او التصنيف :  title , price
         
         filter :
             size

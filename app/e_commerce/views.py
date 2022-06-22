@@ -7,6 +7,8 @@ from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from e_commerce import serializers
 from e_commerce import models
@@ -19,8 +21,9 @@ class RegisterViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdateOwnProfile,)
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name', 'email',)
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'email']
+
 
 
 class UserLoginApiView(ObtainAuthToken):
@@ -29,10 +32,13 @@ class UserLoginApiView(ObtainAuthToken):
 
 
 
-
 class Product_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Product_serializer
     queryset = models.Product.objects.all()
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
+    search_fields = ['Product_title']
+    filterset_fields = ['Product_price', 'Product_brand', 'Product_category', 'product_color', 'product_size']
+    ordering_fields = ['Product_price']
 
 
 class Review_ViewSet(viewsets.ModelViewSet):
@@ -50,9 +56,11 @@ class Cart_ViewSet(viewsets.ModelViewSet):
     queryset = models.Cart.objects.all()
 
 
+
 class Cart_item_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Cart_item_serializer
     queryset = models.Cart_item.objects.all()
+
 
 
 class Images_ViewSet(viewsets.ModelViewSet):

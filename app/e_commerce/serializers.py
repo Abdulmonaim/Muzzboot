@@ -1,4 +1,5 @@
 from pyexpat import model
+from wsgiref import validate
 from rest_framework import serializers
 from e_commerce import models
 
@@ -49,6 +50,7 @@ class Category_serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
 class Cart_serializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cart
@@ -59,6 +61,7 @@ class Cart_item_serializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cart_item
         fields = '__all__'
+        
 
 
 class Images_serializer(serializers.ModelSerializer):
