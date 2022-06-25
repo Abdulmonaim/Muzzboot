@@ -72,7 +72,6 @@ class User (AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=75)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    # is_vendor = models.BooleanField(default=False)
 
     objects = UserProfileManager()
 
