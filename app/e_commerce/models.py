@@ -41,13 +41,13 @@ class Review (models.Model):
 
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
-    def create_user(self, email, name, password):
+    def create_user(self, first_name, last_name, email, password, mobile, address):
         """Create a new user profile"""
         if not email:
             raise ValueError('User must have an email address')
 
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name, password=password)
+        user = self.model(first_name=first_name, last_name=last_name, email=email, password=password, mobile=mobile, address=address)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -67,7 +67,6 @@ class UserProfileManager(BaseUserManager):
 class User (AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    name = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=255, unique=True)
     mobile = models.CharField(max_length=15)
     address = models.CharField(max_length=75)
