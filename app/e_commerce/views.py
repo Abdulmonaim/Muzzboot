@@ -1,7 +1,7 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.decorators import action
-from rest_framework.views import APIView
-from rest_framework.response import Response
+# from django.shortcuts import get_object_or_404
+# from rest_framework.decorators import action
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status, filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -20,9 +20,10 @@ class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Register_Serializer
     queryset = models.User.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.UpdateOwnProfile,)
+    permission_classes = (permissions.UpdateOwnProfile, IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email',)
+
 
 
 

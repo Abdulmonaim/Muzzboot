@@ -41,7 +41,7 @@ class Review (models.Model):
 
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
-    def create_user(self, first_name, last_name, email, password, mobile, address):
+    def create_user(self, first_name, last_name, email, password, mobile='', address=''):
         """Create a new user profile"""
         if not email:
             raise ValueError('User must have an email address')
@@ -53,9 +53,9 @@ class UserProfileManager(BaseUserManager):
         return user
 
 
-    def create_superuser(self, email, name, password):
+    def create_superuser(self, email, first_name, last_name, password):
         """Create and save a new superuser with given details"""
-        user = self.create_user(email, name, password)
+        user = self.create_user(first_name, last_name, email, password)
 
         user.is_superuser = True
         user.is_staff = True
@@ -76,10 +76,10 @@ class User (AbstractBaseUser, PermissionsMixin):
     objects = UserProfileManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self): 
-        return self.name
+        return self.first_name
 
 
 
