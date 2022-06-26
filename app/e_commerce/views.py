@@ -20,9 +20,18 @@ class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Register_Serializer
     queryset = models.User.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.UpdateOwnProfile, IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email',)
+
+    def get_permissions(self):
+
+        if self.action == 'create':
+            permission_classes = [AllowAny]
+        elif self.action == 'list':
+            permission_classes = [IsAdminUser]
+        else:
+                permission_classes = [permissions.UpdateOwnProfile]
+        return [permission() for permission in permission_classes]
 
 
 
