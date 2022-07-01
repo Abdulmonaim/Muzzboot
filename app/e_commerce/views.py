@@ -63,6 +63,13 @@ class Product_ViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+    
+    
+    # def get_queryset(self):
+    #     if not bool(self.request.GET):
+    #         return Entry.objects.none()
+
+    #     return Entry.objects.all()
 
 
 
