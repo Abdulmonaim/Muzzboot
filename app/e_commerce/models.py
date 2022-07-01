@@ -6,37 +6,49 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
+# class Transaction (models.Model):
+#     Transaction_code = models.CharField(max_length=100)
+#     Transaction_content = models.TextField()
+#     Transaction_type = models.SmallIntegerField()
+#     Transaction_mode = models.SmallIntegerField()
+#     Transaction_status = models.SmallIntegerField()
+#     Transaction_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+#     Transaction_order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
+
+#     def __str__(self): 
+#         return self.Transaction_content
 
 
 
 class Product (models.Model):
-    Product_title = models.CharField(max_length=100)
-    Product_details = models.TextField()
-    Product_price = models.DecimalField(max_digits=5, decimal_places=2)
-    Product_discount = models.DecimalField(max_digits=5, decimal_places=2)
-    Product_is_active = models.BooleanField(default=True)
-    Product_brand = models.CharField(max_length=75)
-    Product_category = models.ManyToManyField('Category')
-    Product_user = models.ManyToManyField('User')
+    product_title = models.CharField(max_length=100)
+    product_details = models.TextField()
+    product_price = models.DecimalField(max_digits=5, decimal_places=2)
+    product_discount = models.DecimalField(max_digits=5, decimal_places=2)
+    product_is_active = models.BooleanField(default=True)
+    product_brand = models.CharField(max_length=75)
+    product_review = models.SmallIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    product_category = models.ManyToManyField('Category')
+    product_user = models.ManyToManyField('User')
     product_color = models.ManyToManyField('Color')
     product_size = models.ManyToManyField('Size')
 
-
-
     def __str__(self): 
-        return self.Product_title
+        return self.product_title
 
 
 
 class Review (models.Model):
-    Review_rating = models.SmallIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
-    Review_content = models.TextField()
-    Review_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    Review_user = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True )
+    review_rating = models.SmallIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    review_content = models.TextField()
+    review_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    review_user = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True)
 
-    def __str__(self): 
-        return self.Review_user
+    # class Meta:
+    #     db_table = 'review'
 
+    # def __str__(self): 
+    #     return self.Review_user
 
 
 class UserProfileManager(BaseUserManager):
@@ -60,7 +72,6 @@ class UserProfileManager(BaseUserManager):
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
-
         return user
 
 
@@ -84,77 +95,77 @@ class User (AbstractBaseUser, PermissionsMixin):
 
 
 class Category (models.Model):
-    Category_title = models.CharField(max_length=75)
-    Category_gender = models.BooleanField(default=True)
-    Category_description = models.CharField(max_length=100)
-    Category_is_active = models.BooleanField(default=True)
+    category_title = models.CharField(max_length=75)
+    category_gender = models.BooleanField(default=True)
+    category_description = models.CharField(max_length=100)
+    category_is_active = models.BooleanField(default=True)
 
-    def __str__(self): 
-        return self.Category_title
+    # class Meta:
+    #     db_table = 'category'
+    # def __str__(self): 
+    #     return self.Category_title
+
 
 
 class Cart (models.Model):
-    Cart_first_name = models.CharField(max_length=50)
-    Cart_last_name = models.CharField(max_length=50)
-    Cart_email = models.EmailField(max_length=255, unique=True)
-    Cart_mobile = models.CharField(max_length=15)
-    Cart_total = models.DecimalField(max_digits=5, decimal_places=2)
-    Cart_shipping = models.DecimalField(max_digits=5, decimal_places=2)
-    Cart_grand_total = models.DecimalField(max_digits=5, decimal_places=2)
-    Cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    cart_first_name = models.CharField(max_length=50)
+    cart_last_name = models.CharField(max_length=50)
+    cart_email = models.EmailField(max_length=255, unique=True)
+    cart_mobile = models.CharField(max_length=15)
+    cart_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    cart_shipping = models.DecimalField(max_digits=5, decimal_places=2)
+    cart_grand_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     cart_product = models.ManyToManyField('Cart_item')
 
     def __str__(self): 
-        return self.Cart_first_name
-
+        return self.cart_first_name
 
 
 class Cart_item (models.Model):
-    Cart_item_title = models.CharField(max_length=75)
-    Cart_item_photo = models.ImageField()
-    Cart_item_size = models.CharField(max_length=7)
-    Cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
-    Cart_item_quntity = models.IntegerField()
-    Cart_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    Cart_item_image = models.ForeignKey('Images', on_delete=models.CASCADE, blank=True, null=True)
-    
-    
-    
+    cart_item_title = models.CharField(max_length=75)
+    cart_item_photo = models.ImageField()
+    cart_item_size = models.CharField(max_length=7)
+    cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
+    cart_item_quntity = models.IntegerField()
+    cart_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    cart_item_image = models.ForeignKey('Images', on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self): 
-        return self.Cart_item_title
+        return self.cart_item_photo
 
 
-# class Transaction (models.Model):
-#     Transaction_code = models.CharField(max_length=100)
-#     Transaction_content = models.TextField()
-#     Transaction_type = models.SmallIntegerField()
-#     Transaction_mode = models.SmallIntegerField()
-#     Transaction_status = models.SmallIntegerField()
-#     Transaction_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-#     Transaction_order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
-
+# class Checked_cart (models.Model):
+#     checked_cart_first_name = models.CharField(max_length=50)
+#     checked_cart_last_name = models.CharField(max_length=50)
+#     checked_cart_email = models.EmailField(max_length=255, unique=True)
+#     checked_cart_mobile = models.CharField(max_length=15)
+#     checked_cart_total = models.DecimalField(max_digits=5, decimal_places=2)
+#     checked_cart_shipping = models.DecimalField(max_digits=5, decimal_places=2)
+#     checked_cart_grand_total = models.DecimalField(max_digits=5, decimal_places=2)
+#     checked_cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+#     checked_cart_product = models.ManyToManyField('Checked_cart_item')
 
 #     def __str__(self): 
-#         return self.Transaction_content
+#         return self.Checked_cart_first_name
 
 
 
 class Images (models.Model):
-    Images_img = models.ImageField()
-    Images_product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    Images_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    images_img = models.ImageField()
+    images_product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    images_category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self): 
-        return self.Images_img
+        return self.images_img
 
 
 
 class Color (models.Model):
-    Color_name = models.CharField(max_length=75)
+    color_name = models.CharField(max_length=75)
 
     def __str__(self): 
-        return self.Color_name
+        return self.color_name
 
 
 class Size (models.Model):
@@ -163,5 +174,3 @@ class Size (models.Model):
 
     def __str__(self): 
         return self.size_name
-
-
