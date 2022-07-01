@@ -1,8 +1,14 @@
-from pyexpat import model
-from wsgiref import validate
+# from pyexpat import model
+# from wsgiref import validate
 from rest_framework import serializers
 from e_commerce import models
+# from django.db import connection
 
+
+# control = connection.cursor()
+# control.execute("SELECT * FROM category")
+# rev = control.fetchone()
+# print(rev)
 
 
 
