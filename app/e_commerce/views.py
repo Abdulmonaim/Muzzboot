@@ -9,12 +9,12 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
-
-
 from e_commerce import serializers
 from e_commerce import models
 from e_commerce import permissions
 from e_commerce import filter
+##########################################################################################
+
 
 
 class RegisterViewSet(viewsets.ModelViewSet):
@@ -34,8 +34,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
         else:
                 permission_classes = [permissions.UpdateOwnProfile]
         return [permission() for permission in permission_classes]
-
-
+##########################################################################################
 
 
 class UserLoginApiView(ObtainAuthToken):
@@ -46,6 +45,7 @@ class UserLoginApiView(ObtainAuthToken):
         response = super(UserLoginApiView, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         return Response({'id': token.user_id, 'token': token.key})
+##########################################################################################
 
 
 class Product_ViewSet(viewsets.ModelViewSet):
@@ -64,26 +64,36 @@ class Product_ViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
-    
-    
-    # def get_queryset(self):
-    #     if not bool(self.request.GET):
-    #         return Entry.objects.none()
-
-    #     return Entry.objects.all()
-
+##########################################################################################
 
 
 class Review_ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.Review_serializer
     queryset = models.Review.objects.all()
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (permissions.UpdateOwnProfile,)
+    serializer_class = serializers.Review_serializer
+    
+    # def list():
+    #     reiviews = models.Review.objects.filter(review_product=product_id)
+    #     product, total = models.Product.objects.get(pk=product_id), 0
+    #     for reiview in reiviews:
+    #         total += reiview.review_rating
+
+    #     avg = total / len(reiviews)
+    #     product.product_rating = avg
+    #     product.save()
+    #     return Response(serializer.data)
+
+    # def list(self, request, *args, **kwargs):
+    # # do your customization here
+    # instance = self.get_object()
+    # serializer = self.get_serializer(instance)
+    # return Response(serializer.data)
+##########################################################################################
 
 
 class Category_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Category_serializer
     queryset = models.Category.objects.all()
+##########################################################################################
 
 
 class Cart_ViewSet(viewsets.ModelViewSet):
@@ -91,7 +101,7 @@ class Cart_ViewSet(viewsets.ModelViewSet):
     queryset = models.Cart.objects.all()
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (permissions.UpdateOwnProfile,)
-
+##########################################################################################
 
 
 class Cart_item_ViewSet(viewsets.ModelViewSet):
@@ -99,17 +109,19 @@ class Cart_item_ViewSet(viewsets.ModelViewSet):
     queryset = models.Cart_item.objects.all()
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (permissions.UpdateOwnProfile,)
-
+##########################################################################################
 
 
 class Images_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Images_serializer
     queryset = models.Images.objects.all()
+##########################################################################################
 
 
 class Color_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Color_serializer
     queryset = models.Color.objects.all()
+##########################################################################################
 
 
 class Size_ViewSet(viewsets.ModelViewSet):

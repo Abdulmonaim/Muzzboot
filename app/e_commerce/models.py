@@ -1,3 +1,4 @@
+# import jsonfield
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
@@ -13,7 +14,7 @@ class Product (models.Model):
     product_title = models.CharField(max_length=100)
     product_details = models.TextField()
     product_price = models.DecimalField(max_digits=5, decimal_places=2)
-    product_discount = models.DecimalField(max_digits=5, decimal_places=2)
+    review_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
     product_is_active = models.BooleanField(default=True)
     product_brand = models.CharField(max_length=75)
     product_date_entry = models.DateField()
@@ -23,15 +24,13 @@ class Product (models.Model):
     product_color = models.ManyToManyField('Color')
     product_size = models.ManyToManyField('Size')
 
-
-
     def __str__(self): 
         return self.product_title
 ########################################################################################################################
 
 
 class Review (models.Model):
-    review_rating = models.SmallIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    review_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
     review_content = models.TextField()
     review_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     review_user = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True )
@@ -75,6 +74,7 @@ class User (AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=75)
     followers = models.IntegerField(default=0)
     visitors = models.IntegerField(default=0)
+    user_json = models.JSONField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
