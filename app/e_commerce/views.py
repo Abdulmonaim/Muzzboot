@@ -14,6 +14,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from e_commerce import serializers
 from e_commerce import models
 from e_commerce import permissions
+from e_commerce import filter
 
 
 class RegisterViewSet(viewsets.ModelViewSet):
@@ -52,9 +53,9 @@ class Product_ViewSet(viewsets.ModelViewSet):
     queryset = models.Product.objects.all()
     authentication_classes = (TokenAuthentication,)
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
-    search_fields = ['Product_title']
-    filterset_fields = ['Product_price', 'Product_brand', 'Product_category', 'product_color', 'product_size']
-    ordering_fields = ['Product_price']
+    search_fields = ['product_title']
+    filter_class = filter.ProductFilter
+    ordering_fields = ['product_price']
 
     def get_permissions(self):
 
