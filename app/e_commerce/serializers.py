@@ -2,13 +2,24 @@
 # from wsgiref import validate
 from rest_framework import serializers
 from e_commerce import models
-# from django.db import connection
+from django.db import connection
 
 
-# control = connection.cursor()
-# control.execute("SELECT * FROM category")
-# rev = control.fetchone()
-# print(rev)
+# instance = models.Cart_item.objects.filter(cart_item_cart=1)
+# cart, total = models.Cart.objects.filter(pk=1)[0], 0
+
+# for i in instance:
+#     x1 = i.cart_item_price
+#     y1 = i.cart_item_quntity
+#     total += x1 * y1
+#     print(total)
+
+# cart.cart_total = total
+# cart.cart_grand_total = cart.cart_shipping + total
+# cart.save()
+# print(cart.cart_total, cart.cart_grand_total)
+
+
 
 
 
