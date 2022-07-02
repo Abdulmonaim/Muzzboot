@@ -32,6 +32,7 @@ class Product (models.Model):
 class Review (models.Model):
     review_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
     review_content = models.TextField()
+    review_date = models.DateField()
     review_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     review_user = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True )
 
