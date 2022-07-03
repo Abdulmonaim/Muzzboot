@@ -79,6 +79,8 @@ class User (AbstractBaseUser, PermissionsMixin):
     height = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     cup_size = models.CharField(max_length=10, blank=True, null=True)
     size_image = models.ImageField()
+    human_parsing = models.ImageField()
+    user_size = models.CharField(max_length=7)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
