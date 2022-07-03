@@ -68,7 +68,7 @@ class Product_ViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk= None, *args, **kwargs):
         queryset = models.Review.objects.filter(review_product=pk)
-        serializer = serializers.Review_serializer(queryset, many=True)
+        serializer = serializers.Product_serializer(queryset, many=True)
         product, total = models.Product.objects.get(pk=pk), 0
         for review in queryset:
             total += review.review_rating
