@@ -12,7 +12,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Product (models.Model):
     product_title = models.CharField(max_length=100)
     product_details = models.TextField()
-    product_price = models.DecimalField(max_digits=5, decimal_places=2)
+    product_price = models.DecimalField(max_digits=10, decimal_places=2)
     product_discount = models.DecimalField(max_digits=5, decimal_places=2, default=False)
     product_brand = models.CharField(max_length=75)
     quantity = models.IntegerField()
@@ -77,7 +77,7 @@ class User (AbstractBaseUser, PermissionsMixin):
     visitors = models.IntegerField(default=0)
     user_json = models.JSONField(blank=True, null=True)
     height = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    cup_size = models.CharField(max_length=10, blank=True, null=True)
+    cup_size = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     size_image = models.ImageField(blank=True, null=True)
     human_parsing = models.ImageField(blank=True, null=True)
     user_size = models.CharField(max_length=7, blank=True, null=True)
