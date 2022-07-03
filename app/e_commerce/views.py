@@ -62,11 +62,11 @@ class Product_ViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve' or self.action == 'list':
             permission_classes = [AllowAny]
         else:
-            permission_classes = [IsAdminUser]
+            permission_classes = [permissions.UpdateOwnProduct]
         return [permission() for permission in permission_classes]
 
 
-    def retrive(self, request, pk= None, *args, **kwargs):
+    def retrieve(self, request, pk= None, *args, **kwargs):
         queryset = models.Review.objects.filter(review_product=pk)
         serializer = serializers.Review_serializer(queryset, many=True)
         product, total = models.Product.objects.get(pk=pk), 0
@@ -83,6 +83,15 @@ class Product_ViewSet(viewsets.ModelViewSet):
 class Review_ViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     serializer_class = serializers.Review_serializer
+    authentication_classes = (TokenAuthentication, IsAuthenticated,)
+
+    def get_permissions(self):
+
+        if self.action == 'list':
+            permission_classes = [AllowAny]
+        else:
+                permission_classes = [permissions.UpdateOwnProfile]
+        return [permission() for permission in permission_classes]
     
 ##########################################################################################
 
