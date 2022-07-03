@@ -14,11 +14,10 @@ class Product (models.Model):
     product_title = models.CharField(max_length=100)
     product_details = models.TextField()
     product_price = models.DecimalField(max_digits=5, decimal_places=2)
-    review_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
     product_is_active = models.BooleanField(default=True)
     product_brand = models.CharField(max_length=75)
     product_date_entry = models.DateField()
-    product_rating = models.DecimalField(max_digits=5, decimal_places=1)
+    product_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     product_category = models.ManyToManyField('Category')
     product_user = models.ManyToManyField('User')
     product_color = models.ManyToManyField('Color')
@@ -37,7 +36,7 @@ class Review (models.Model):
     review_user = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True )
 
     def __str__(self): 
-        return self.review_user
+        return str(self.review_user)
 ########################################################################################################################
 
 

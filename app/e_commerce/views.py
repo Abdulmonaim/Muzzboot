@@ -71,22 +71,20 @@ class Review_ViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     serializer_class = serializers.Review_serializer
     
-    # def list():
-    #     reiviews = models.Review.objects.filter(review_product=product_id)
-    #     product, total = models.Product.objects.get(pk=product_id), 0
-    #     for reiview in reiviews:
-    #         total += reiview.review_rating
+    def list(self, request, *args, **kwargs):
+        queryset = models.Review.objects.filter(review_product=1)
+        serializer = serializers.Review_serializer(queryset, many=True)
+        product, total = models.Product.objects.get(pk=1), 0
+        for review in queryset:
+            total += review.review_rating
 
-    #     avg = total / len(reiviews)
-    #     product.product_rating = avg
-    #     product.save()
-    #     return Response(serializer.data)
+        avg = total / len(queryset)
+        product.product_rating = avg
+        product.save()
+        return Response(serializer.data)
 
-    # def list(self, request, *args, **kwargs):
-    # # do your customization here
-    # instance = self.get_object()
-    # serializer = self.get_serializer(instance)
-    # return Response(serializer.data)
+
+    
 ##########################################################################################
 
 
