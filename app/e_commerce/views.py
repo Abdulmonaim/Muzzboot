@@ -83,7 +83,7 @@ class Product_ViewSet(viewsets.ModelViewSet):
 class Review_ViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     serializer_class = serializers.Review_serializer
-    authentication_classes = (TokenAuthentication, IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_permissions(self):
 
