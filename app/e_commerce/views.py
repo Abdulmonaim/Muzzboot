@@ -72,7 +72,7 @@ class Product_ViewSet(viewsets.ModelViewSet):
 
 
         for review in reviews:
-            total += review.review_rating
+            total += review.review_rating   
         print(queryset)
         avg = total / len(reviews)
         print(len(reviews))
