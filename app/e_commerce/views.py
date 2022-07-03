@@ -62,7 +62,7 @@ class Product_ViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve' or self.action == 'list':
             permission_classes = [AllowAny]
         else:
-            permission_classes = [permissions.UpdateOwnProduct]
+            permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
 
@@ -70,13 +70,16 @@ class Product_ViewSet(viewsets.ModelViewSet):
         reviews = models.Review.objects.filter(review_product=pk)
         queryset, total = models.Product.objects.get(pk=pk), 0
 
+
         for review in reviews:
             total += review.review_rating
-
+        print(queryset)
         avg = total / len(reviews)
+        print(len(reviews))
         queryset.product_rating = avg
         queryset.save()
-        serializer = serializers.Product_serializer(queryset, many=True)
+        serializer = serializers.Product_serializer(queryset)
+
         return Response(serializer.data)
 ##########################################################################################
 
