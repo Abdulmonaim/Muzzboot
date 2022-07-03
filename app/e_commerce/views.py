@@ -118,6 +118,20 @@ class Cart_ViewSet(viewsets.ModelViewSet):
 class Cart_item_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Cart_item_serializer
     queryset = models.Cart_item.objects.all()
+
+    def create(self, request, pk= None, *args, **kwargs):
+        cart_item = models.Cart_item.objects.filter(cart_item_cart=pk)
+        queryset, total = models.Cart.objects.get(pk=pk), 0
+
+        for item in cart_item:
+            total += item.cart_item_price * item.cart_item_quntity
+
+        queryset.cart_total = total 
+        queryset.save()       
+        serializer = serializers.Cart_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (permissions.UpdateOwnProfile,)
 ##########################################################################################

@@ -110,9 +110,9 @@ class Cart (models.Model):
     # cart_email = models.EmailField(max_length=255, unique=True)
     # cart_mobile = models.CharField(max_length=15)
     # address = models.CharField(max_length=75)
-    cart_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    cart_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=0)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2)
-    grand_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    grand_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=0)
     cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self): 
@@ -125,7 +125,7 @@ class Cart_item (models.Model):
     cart_item_photo = models.ImageField(blank=True, null=True)
     cart_item_size = models.CharField(max_length=7)
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
-    cart_item_quntity = models.IntegerField()
+    cart_item_quntity = models.IntegerField(default=1)
     cart_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     cart_item_cart = models.ForeignKey(Cart, on_delete=models.CASCADE, blank=True, null=True)
     
@@ -152,9 +152,10 @@ class Checked_cart_item (models.Model):
     checked_cart_item_photo = models.ImageField(blank=True, null=True)
     checked_cart_item_size = models.CharField(max_length=7)
     checked_cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
-    checked_cart_item_quntity = models.IntegerField()
+    checked_cart_item_quntity = models.IntegerField(default=1)
     checked_cart = models.ForeignKey(Checked_cart, on_delete=models.CASCADE, blank=True, null=True)
     sales = models.ForeignKey('Sales', on_delete=models.CASCADE, blank=True, null=True)
+    product_id = models.IntegerField(default=0)
         
     def __str__(self): 
         return self.checked_cart_item_title
