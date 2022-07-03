@@ -1,4 +1,3 @@
-# import jsonfield
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
@@ -15,8 +14,9 @@ class Product (models.Model):
     product_details = models.TextField()
     product_price = models.DecimalField(max_digits=5, decimal_places=2)
     product_discount = models.DecimalField(max_digits=5, decimal_places=2, default=False)
-    product_is_active = models.BooleanField(default=True)
     product_brand = models.CharField(max_length=75)
+    quantity = models.IntegerField()
+    quantity_alarm = models.CharField(max_length=100)
     product_date_entry = models.DateField()
     product_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     product_category = models.ManyToManyField('Category')
@@ -81,7 +81,6 @@ class User (AbstractBaseUser, PermissionsMixin):
     size_image = models.ImageField(blank=True, null=True)
     human_parsing = models.ImageField(blank=True, null=True)
     user_size = models.CharField(max_length=7, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
 
@@ -99,7 +98,6 @@ class Category (models.Model):
     category_title = models.CharField(max_length=75)
     category_gender = models.BooleanField(default=True)
     category_description = models.CharField(max_length=100)
-    category_is_active = models.BooleanField(default=True)
 
     def __str__(self): 
         return self.category_title
@@ -107,13 +105,14 @@ class Category (models.Model):
 
 
 class Cart (models.Model):
-    cart_first_name = models.CharField(max_length=50)
-    cart_last_name = models.CharField(max_length=50)
-    cart_email = models.EmailField(max_length=255, unique=True)
-    cart_mobile = models.CharField(max_length=15)
+    # cart_first_name = models.CharField(max_length=50)
+    # cart_last_name = models.CharField(max_length=50)
+    # cart_email = models.EmailField(max_length=255, unique=True)
+    # cart_mobile = models.CharField(max_length=15)
+    # address = models.CharField(max_length=75)
     cart_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    cart_shipping = models.DecimalField(max_digits=5, decimal_places=2)
-    cart_grand_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    shipping_charge = models.DecimalField(max_digits=5, decimal_places=2)
+    grand_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self): 
@@ -128,7 +127,6 @@ class Cart_item (models.Model):
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
     cart_item_quntity = models.IntegerField()
     cart_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    cart_item_image = models.ForeignKey('Images', on_delete=models.CASCADE, blank=True, null=True)
     cart_item_cart = models.ForeignKey(Cart, on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self): 
@@ -137,14 +135,11 @@ class Cart_item (models.Model):
 
 
 class Checked_cart (models.Model):
-    checked_cart_id = models.CharField(max_length=50, primary_key=True)
-    checked_cart_first_name = models.CharField(max_length=50)
-    checked_cart_last_name = models.CharField(max_length=50)
-    checked_cart_email = models.EmailField(max_length=255, unique=True)
-    checked_cart_mobile = models.CharField(max_length=15)
-    checked_cart_total = models.DecimalField(max_digits=5, decimal_places=2)
-    checked_cart_shipping = models.DecimalField(max_digits=5, decimal_places=2)
-    checked_cart_grand_total = models.DecimalField(max_digits=5, decimal_places=2)
+    checked_cart_id = models.IntegerField(primary_key=True)
+    cart_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    shipping_charge = models.DecimalField(max_digits=5, decimal_places=2)
+    grand_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    user_id = models.IntegerField(default=0)
     checked_cart_selling_date = models.DateField() 
 
     def __str__(self): 
@@ -158,10 +153,8 @@ class Checked_cart_item (models.Model):
     checked_cart_item_size = models.CharField(max_length=7)
     checked_cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
     checked_cart_item_quntity = models.IntegerField()
-    checked_cart_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    checked_cart_item_image = models.ForeignKey('Images', on_delete=models.CASCADE, blank=True, null=True)
-    checked_cart_item_Checked_cart = models.ForeignKey(Checked_cart, on_delete=models.CASCADE, blank=True, null=True)
-    checked_cart_item_Sales = models.ForeignKey('Sales', on_delete=models.CASCADE, blank=True, null=True)
+    checked_cart = models.ForeignKey(Checked_cart, on_delete=models.CASCADE, blank=True, null=True)
+    sales = models.ForeignKey('Sales', on_delete=models.CASCADE, blank=True, null=True)
         
     def __str__(self): 
         return self.checked_cart_item_title
@@ -192,16 +185,6 @@ class Size (models.Model):
 
     def __str__(self): 
         return self.size_name
-########################################################################################################################
-
-
-class Quantity(models.Model):
-    quantity_num = models.IntegerField()
-    quantity_alarm = models.CharField(max_length=100)
-    quantity_product = models.ForeignKey(Product,  on_delete=models.CASCADE)
-
-    def __str__(self): 
-        return str(self.quantity_num)
 ########################################################################################################################
 
 

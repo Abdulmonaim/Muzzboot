@@ -15,9 +15,9 @@ from django.db import connection
 #     print(total)
 
 # cart.cart_total = total
-# cart.cart_grand_total = cart.cart_shipping + total
+# cart.grand_total = cart.shipping_charge + total
 # cart.save()
-# print(cart.cart_total, cart.cart_grand_total)
+# print(cart.cart_total, cart.grand_total)
 
 
 
