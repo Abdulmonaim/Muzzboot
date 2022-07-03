@@ -64,17 +64,12 @@ class Product_ViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
-##########################################################################################
 
 
-class Review_ViewSet(viewsets.ModelViewSet):
-    queryset = models.Review.objects.all()
-    serializer_class = serializers.Review_serializer
-    
-    def list(self, request, *args, **kwargs):
-        queryset = models.Review.objects.filter(review_product=1)
+    def retrive(self, request, pk= None, *args, **kwargs):
+        queryset = models.Review.objects.filter(review_product=pk)
         serializer = serializers.Review_serializer(queryset, many=True)
-        product, total = models.Product.objects.get(pk=1), 0
+        product, total = models.Product.objects.get(pk=pk), 0
         for review in queryset:
             total += review.review_rating
 
@@ -82,8 +77,12 @@ class Review_ViewSet(viewsets.ModelViewSet):
         product.product_rating = avg
         product.save()
         return Response(serializer.data)
+##########################################################################################
 
 
+class Review_ViewSet(viewsets.ModelViewSet):
+    queryset = models.Review.objects.all()
+    serializer_class = serializers.Review_serializer
     
 ##########################################################################################
 

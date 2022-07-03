@@ -46,13 +46,10 @@ class Register_Serializer(serializers.ModelSerializer):
         )
 
         return user
-#########################################################################################################
 
 
-class Product_serializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Product
-        fields = '__all__'
+
+
 #########################################################################################################
 
 
@@ -103,3 +100,12 @@ class Size_serializer(serializers.ModelSerializer):
         model = models.Size
         fields = '__all__'
 
+#########################################################################################################
+
+class Product_serializer(serializers.ModelSerializer):
+    product_category = Category_serializer(many=True)
+    product_color = Color_serializer(many=True)
+    product_size = Size_serializer(many=True)
+    class Meta:
+        model = models.Product
+        fields = '__all__'
