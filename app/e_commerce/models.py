@@ -165,6 +165,7 @@ class Quantity (models.Model):
     quantity_size = models.ForeignKey(Size, on_delete=models.CASCADE)
     quantity_color = models.ForeignKey(Color, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+    quantity_alarm = models.CharField(max_length=100, blank=True, null=True)
     
     def __str__(self): 
         return str(self.quantity)
