@@ -26,7 +26,8 @@ class Register_Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'mobile', 'address')
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'mobile', 'address', 'height',
+         'gender', 'cup_size', 'size_image', 'human_parsing', 'user_size', 'is_staff','followers', 'visitors')
         extra_kwargs = {
             'password': {
                 'write_only': True,
@@ -77,7 +78,8 @@ class Cart_serializer(serializers.ModelSerializer):
 class Cart_item_serializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cart_item
-        fields = '__all__'
+        fields = ('cart_item_title', 'cart_item_photo', 'cart_item_price', 'cart_item_size',
+         'cart_item_color', 'cart_item_quntity', 'cart_item_product', 'cart_item_cart')
 #########################################################################################################        
 
 
