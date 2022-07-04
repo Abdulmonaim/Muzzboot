@@ -5,7 +5,17 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import MaxValueValidator, MinValueValidator
 ########################################################################################################################
 
+class EcommerceManager(models.Manager):
 
+    def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
+    cart_item_quntity, cart_item_title, cart_item_photo, cart_item_price):
+
+        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
+        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quntity=cart_item_quntity,
+        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
+        item.save(using=self._db)
+
+        return item    
 
 
 
@@ -13,6 +23,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class UserProfileManager(BaseUserManager):
+    
+
     """Manager for user profiles"""
     def create_user(self, first_name, last_name, email, password, mobile='', address=''):
         """Create a new user profile"""
@@ -100,19 +112,15 @@ class CartItem (models.Model):
     cart_item_title = models.CharField(max_length=75, blank=True, null=True)
     cart_item_photo = models.ImageField(blank=True, null=True)
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-
-    def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
-    cart_item_quntity, cart_item_title, cart_item_photo, cart_item_price):
-
-        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
-        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quntity=cart_item_quntity,
-        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
-        item.save(using=self._db)
-
-        return item
+    ecommerce = EcommerceManager()
+    objects = models.Manager
     
     def __str__(self): 
-        return self.cart_item_title
+        return str(self.cart_item_title)
+    
+
+    
+
 ########################################################################################################################
 
 
