@@ -120,16 +120,24 @@ class Cart_item_ViewSet(viewsets.ModelViewSet):
     queryset = models.Cart_item.objects.all()
 
     def create(self, request, pk= None, *args, **kwargs):
-        cart_item = models.Cart_item.objects.filter(cart_item_cart=pk)
-        queryset, total = models.Cart.objects.get(pk=pk), 0
+        response = super(Cart_item_ViewSet, self).post(request, *args, **kwargs)
+        product_id = models.Product.objects.get(key=response.data['id'])
+        instance = models.Cart_item.objects.get(cart_item_product=product_id)   
+        product = models.Product.objects.get(pk=product_id)
+        image = models.Images.objects.filter(images_product=pk)[0]
 
-        for item in cart_item:
-            total += item.cart_item_price * item.cart_item_quntity
+        instance.cart_item_title = product.product_title
+        instance.cart_item_price = product.product_price
+        instance.cart_item_size = product.response.data['size']
+        instance.cart_item_color = product.response.data['color']
+        instance.cart_item_photo = image.images_img['images_img']
+        
+        queryset = models.Cart.objects.get(cart_user = response.data['user_id'])
 
-        queryset.cart_total = total 
+        queryset.cart_total += instance.cart_item_price  
         queryset.save()       
-        serializer = serializers.Cart_serializer(queryset, many=True)
-        return Response(serializer.data)
+        serializer = serializers.Cart_item_serializer(instance, many=True)
+        serializer.save()
 
 
     # authentication_classes = (TokenAuthentication,)

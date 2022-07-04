@@ -82,7 +82,7 @@ class User (AbstractBaseUser, PermissionsMixin):
     human_parsing = models.ImageField(blank=True, null=True)
     user_size = models.CharField(max_length=7, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
-    is_vendor = models.BooleanField(default=False)
+    # is_vendor = models.BooleanField(default=False)
 
     objects = UserProfileManager()
 
@@ -124,6 +124,7 @@ class Cart_item (models.Model):
     cart_item_title = models.CharField(max_length=75)
     cart_item_photo = models.ImageField(blank=True, null=True)
     cart_item_size = models.CharField(max_length=7)
+    cart_item_color = models.CharField(max_length=7)
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
     cart_item_quntity = models.IntegerField(default=1)
     cart_item_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
