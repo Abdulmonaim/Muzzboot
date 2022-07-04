@@ -118,6 +118,8 @@ class Cart_ViewSet(viewsets.ModelViewSet):
 class Cart_item_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.Cart_item_serializer
     queryset = models.Cart_item.objects.all()
+    authentication_classes = (TokenAuthentication,)
+
 
     def create(self, request, pk= None, *args, **kwargs):
         response = super(Cart_item_ViewSet, self).post(request, *args, **kwargs)
@@ -138,6 +140,8 @@ class Cart_item_ViewSet(viewsets.ModelViewSet):
         queryset.save()       
         serializer = serializers.Cart_item_serializer(instance, many=True)
         serializer.save()
+
+
 
 
     # authentication_classes = (TokenAuthentication,)
