@@ -102,11 +102,11 @@ class CartItem (models.Model):
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
-     cart_item_quntity, cart_item_title, cart_item_photo, cart_item_price):
+    cart_item_quntity, cart_item_title, cart_item_photo, cart_item_price):
 
         item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
-         cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quntity=cart_item_quntity,
-         cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
+        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quntity=cart_item_quntity,
+        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
         item.save(using=self._db)
 
         return item
@@ -125,7 +125,7 @@ class CheckedCart (models.Model):
     checked_cart_selling_date = models.DateField() 
 
     def __str__(self): 
-        return self.checked_cart_first_name
+        return str(self.checked_cart_id)
 ########################################################################################################################
 
 
@@ -167,7 +167,7 @@ class Quantity (models.Model):
     quantity = models.IntegerField()
     
     def __str__(self): 
-        return self.size_name
+        return str(self.quantity)
 ########################################################################################################################
 
 
@@ -206,7 +206,7 @@ class Image (models.Model):
     images_category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self): 
-        return self.img
+        return str(self.img)
 ########################################################################################################################
 
 

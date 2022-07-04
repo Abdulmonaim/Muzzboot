@@ -27,7 +27,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ('id', 'first_name', 'last_name', 'email', 'password', 'mobile', 'address', 'height',
-         'gender', 'cup_size', 'size_image', 'human_parsing', 'user_size', 'is_staff','followers', 'visitors')
+        'gender', 'cup_size', 'size_image', 'human_parsing', 'user_size', 'is_staff','followers', 'visitors')
         extra_kwargs = {
             'password': {
                 'write_only': True,
@@ -66,7 +66,7 @@ class CategorySerializer(serializers.ModelSerializer):
 #########################################################################################################
 
 
-class Cart_serializer(serializers.ModelSerializer):
+class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Cart
@@ -79,12 +79,12 @@ class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CartItem
         fields = ('id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color',
-         'cart_item_quntity', 'cart_item_title', 'cart_item_photo', 'cart_item_price')
+        'cart_item_quntity', 'cart_item_title', 'cart_item_photo', 'cart_item_price')
 
         def create(self, validated_data):
             product = models.Product.objects.get(pk=validated_data['cart_item_product'])
             cart = models.Cart.objects.get(cart_user = validated_data['cart_item_cart'])
-            image = models.Images.objects.filter(images_product=validated_data['cart_item_product'])[0]
+            image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
 
             item = models.CartItem.objects.create_item(
                 cart_item_product=validated_data['cart_item_product'],
@@ -130,9 +130,6 @@ class SizeSerializer(serializers.ModelSerializer):
 #########################################################################################################
 
 class ProductSerializer(serializers.ModelSerializer):
-    product_category = CategorySerializer(many=True)
-    product_color = ColorSerializer(many=True)
-    product_size = SizeSerializer(many=True)
 
     class Meta:
         model = models.Product

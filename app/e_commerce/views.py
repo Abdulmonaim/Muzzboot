@@ -19,7 +19,7 @@ from e_commerce import filter
 
 class RegisterViewSet(viewsets.ModelViewSet):
     """Handle creating, creating and updating profiles"""
-    serializer_class = serializers.Register_Serializer
+    serializer_class = serializers.RegisterSerializer
     queryset = models.User.objects.all()
     authentication_classes = (TokenAuthentication,)
     filter_backends = (filters.SearchFilter,)
@@ -117,13 +117,13 @@ class Cart_ViewSet(viewsets.ModelViewSet):
 
 class Cart_item_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CartItemSerializer
-    queryset = models.Cart_item.objects.all()
+    queryset = models.CartItem.objects.all()
 ##########################################################################################
 
 
 class Images_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ImageSerializer
-    queryset = models.Images.objects.all()
+    queryset = models.Image.objects.all()
 ##########################################################################################
 
 
