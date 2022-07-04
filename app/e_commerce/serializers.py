@@ -85,8 +85,8 @@ class CartItemSerializer(serializers.ModelSerializer):
             product = models.Product.objects.get(pk=validated_data['cart_item_product'])
             cart = models.Cart.objects.get(cart_user = validated_data['cart_item_cart'])
             image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
-
-            item = models.CartItem.objects.create_item(
+            
+            item = models.CartItem.ecommerce.create_item(
                 cart_item_product=validated_data['cart_item_product'],
                 cart_item_cart=cart.id,
                 cart_item_size=validated_data['cart_item_size'],
