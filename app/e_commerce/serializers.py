@@ -21,7 +21,7 @@ from django.db import connection
 
 
 
-class Register_Serializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
     """Serializes a user profile object"""
 
     class Meta:
@@ -47,21 +47,19 @@ class Register_Serializer(serializers.ModelSerializer):
         )
 
         return user
-
-
-
-
 #########################################################################################################
 
 
-class Review_serializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Review
         fields = '__all__'
 #########################################################################################################
 
 
-class Category_serializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Category
         fields = '__all__'
@@ -69,45 +67,73 @@ class Category_serializer(serializers.ModelSerializer):
 
 
 class Cart_serializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Cart
         fields = '__all__'
 #########################################################################################################
 
 
-class Cart_item_serializer(serializers.ModelSerializer):
+class CartItemSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = models.Cart_item
-        fields = ('cart_item_title', 'cart_item_photo', 'cart_item_price', 'cart_item_size',
-         'cart_item_color', 'cart_item_quntity', 'cart_item_product', 'cart_item_cart')
+        model = models.CartItem
+        fields = ('id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color',
+         'cart_item_quntity', 'cart_item_title', 'cart_item_photo', 'cart_item_price')
+
+        def create(self, validated_data):
+            product = models.Product.objects.get(pk=validated_data['cart_item_product'])
+            cart = models.Cart.objects.get(cart_user = validated_data['cart_item_cart'])
+            image = models.Images.objects.filter(images_product=validated_data['cart_item_product'])[0]
+
+            item = models.CartItem.objects.create_item(
+                cart_item_product=validated_data['cart_item_product'],
+                cart_item_cart=cart.id,
+                cart_item_size=validated_data['cart_item_size'],
+                cart_item_color=validated_data['cart_item_color'],
+                cart_item_quntity=validated_data['cart_item_quntity'],
+                cart_item_title=product.product_title,
+                cart_item_photo=image.img,
+                cart_item_price=product.product_price
+            )
+            
+
+            cart.cart_total += product.cart_item_price * validated_data['cart_item_quntity']
+            cart.save()       
+
+            return item
 #########################################################################################################        
 
 
-class Images_serializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = models.Images
+        model = models.Image
         fields = '__all__'
 #########################################################################################################
 
 
-class Color_serializer(serializers.ModelSerializer):
+class ColorSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Color
         fields = '__all__'
 #########################################################################################################
 
 
-class Size_serializer(serializers.ModelSerializer):
+class SizeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Size
         fields = '__all__'
 
 #########################################################################################################
 
-class Product_serializer(serializers.ModelSerializer):
-    product_category = Category_serializer(many=True)
-    product_color = Color_serializer(many=True)
-    product_size = Size_serializer(many=True)
+class ProductSerializer(serializers.ModelSerializer):
+    product_category = CategorySerializer(many=True)
+    product_color = ColorSerializer(many=True)
+    product_size = SizeSerializer(many=True)
+
     class Meta:
         model = models.Product
         fields = '__all__'

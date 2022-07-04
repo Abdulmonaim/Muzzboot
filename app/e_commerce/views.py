@@ -49,7 +49,7 @@ class UserLoginApiView(ObtainAuthToken):
 
 
 class Product_ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.Product_serializer
+    serializer_class = serializers.ProductSerializer
     queryset = models.Product.objects.all()
     authentication_classes = (TokenAuthentication,)
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
@@ -71,7 +71,7 @@ class Product_ViewSet(viewsets.ModelViewSet):
         queryset, total = models.Product.objects.get(pk=pk), 0
 
         if len(reviews) == 0:
-            serializer = serializers.Product_serializer(queryset)
+            serializer = serializers.ProductSerializer(queryset)
             return Response(serializer.data)
 
         for review in reviews:
@@ -79,7 +79,7 @@ class Product_ViewSet(viewsets.ModelViewSet):
         avg = total / len(reviews)
         queryset.product_rating = avg
         queryset.save()
-        serializer = serializers.Product_serializer(queryset)
+        serializer = serializers.ProductSerializer(queryset)
 
         return Response(serializer.data)
 ##########################################################################################
@@ -87,7 +87,7 @@ class Product_ViewSet(viewsets.ModelViewSet):
 
 class Review_ViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
-    serializer_class = serializers.Review_serializer
+    serializer_class = serializers.ReviewSerializer
     authentication_classes = (TokenAuthentication,)
 
     def get_permissions(self):
@@ -102,13 +102,13 @@ class Review_ViewSet(viewsets.ModelViewSet):
 
 
 class Category_ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.Category_serializer
+    serializer_class = serializers.CategorySerializer
     queryset = models.Category.objects.all()
 ##########################################################################################
 
 
 class Cart_ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.Cart_serializer
+    serializer_class = serializers.CartSerializer
     queryset = models.Cart.objects.all()
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (permissions.UpdateOwnProfile,)
@@ -116,51 +116,23 @@ class Cart_ViewSet(viewsets.ModelViewSet):
 
 
 class Cart_item_ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.Cart_item_serializer
+    serializer_class = serializers.CartItemSerializer
     queryset = models.Cart_item.objects.all()
-    authentication_classes = (TokenAuthentication,)
-
-
-    def create(self, request, pk= None, *args, **kwargs):
-        response = super(Cart_item_ViewSet, self).post(request, *args, **kwargs)
-        product_id = models.Product.objects.get(key=response.data['id'])
-        instance = models.Cart_item.objects.get(cart_item_product=product_id)   
-        product = models.Product.objects.get(pk=product_id)
-        image = models.Images.objects.filter(images_product=pk)[0]
-
-        instance.cart_item_title = product.product_title
-        instance.cart_item_price = product.product_price
-        instance.cart_item_size = product.response.data['size']
-        instance.cart_item_color = product.response.data['color']
-        instance.cart_item_photo = image.images_img['images_img']
-        
-        queryset = models.Cart.objects.get(cart_user = response.data['user_id'])
-
-        queryset.cart_total += instance.cart_item_price  
-        queryset.save()       
-        serializer = serializers.Cart_item_serializer(instance, many=True)
-        serializer.save()
-
-
-
-
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (permissions.UpdateOwnProfile,)
 ##########################################################################################
 
 
 class Images_ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.Images_serializer
+    serializer_class = serializers.ImageSerializer
     queryset = models.Images.objects.all()
 ##########################################################################################
 
 
 class Color_ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.Color_serializer
+    serializer_class = serializers.ColorSerializer
     queryset = models.Color.objects.all()
 ##########################################################################################
 
 
 class Size_ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.Size_serializer
+    serializer_class = serializers.SizeSerializer
     queryset = models.Size.objects.all()

@@ -91,22 +91,32 @@ class Cart (models.Model):
 ########################################################################################################################
 
 
-class Cart_item (models.Model):
-    cart_item_title = models.CharField(max_length=75, blank=True, null=True)
-    cart_item_photo = models.ImageField(blank=True, null=True)
-    cart_item_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+class CartItem (models.Model):
+    cart_item_product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    cart_item_cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     cart_item_size = models.CharField(max_length=7)
     cart_item_color = models.CharField(max_length=7)
     cart_item_quntity = models.IntegerField(default=1)
-    cart_item_product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    cart_item_cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart_item_title = models.CharField(max_length=75, blank=True, null=True)
+    cart_item_photo = models.ImageField(blank=True, null=True)
+    cart_item_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+
+    def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
+     cart_item_quntity, cart_item_title, cart_item_photo, cart_item_price):
+
+        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
+         cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quntity=cart_item_quntity,
+         cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
+        item.save(using=self._db)
+
+        return item
     
     def __str__(self): 
         return self.cart_item_title
 ########################################################################################################################
 
 
-class Checked_cart (models.Model):
+class CheckedCart (models.Model):
     checked_cart_id = models.IntegerField(primary_key=True)
     cart_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2)
@@ -119,13 +129,13 @@ class Checked_cart (models.Model):
 ########################################################################################################################
 
 
-class Checked_cart_item (models.Model):
+class CheckedCartItem (models.Model):
     checked_cart_item_title = models.CharField(max_length=75)
     checked_cart_item_photo = models.ImageField(blank=True, null=True)
     checked_cart_item_size = models.CharField(max_length=7)
     checked_cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
     checked_cart_item_quntity = models.IntegerField(default=1)
-    checked_cart = models.ForeignKey(Checked_cart, on_delete=models.CASCADE, blank=True, null=True)
+    checked_cart = models.ForeignKey(CheckedCart, on_delete=models.CASCADE, blank=True, null=True)
     sales = models.ForeignKey('Sales', on_delete=models.CASCADE, blank=True, null=True)
     product_id = models.IntegerField(default=0)
         
@@ -168,8 +178,6 @@ class Product (models.Model):
     product_discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     product_brand = models.CharField(max_length=75)
     max_quantity = models.IntegerField(default=0)
-    product_size = models.CharField(max_length=7, blank=True, null=True)
-    product_color = models.CharField(max_length=15, blank=True, null=True)
     product_date_entry = models.DateField()
     product_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     product_category = models.ManyToManyField(Category)
@@ -192,13 +200,13 @@ class Review (models.Model):
 ########################################################################################################################
 
 
-class Images (models.Model):
-    images_img = models.ImageField()
+class Image (models.Model):
+    img = models.ImageField()
     images_product = models.ForeignKey(Product, on_delete=models.CASCADE)
     images_category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self): 
-        return self.images_img
+        return self.img
 ########################################################################################################################
 
 
