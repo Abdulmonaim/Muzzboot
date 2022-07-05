@@ -6,12 +6,22 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 ########################################################################################################################
 
 
-  
+
 
 
 
 
 class UserProfileManager(BaseUserManager):
+
+    def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
+    cart_item_quantity, cart_item_title, cart_item_photo, cart_item_price):
+
+        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
+        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quantity=cart_item_quantity,
+        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
+        item.save(using=self._db)
+
+        return item  
 
     """Manager for user profiles"""
     def create_user(self, first_name, last_name, email, password, mobile='', address=''):
@@ -81,9 +91,9 @@ class Cart (models.Model):
     # cart_email = models.EmailField(max_length=255, unique=True)
     # cart_mobile = models.CharField(max_length=15)
     # address = models.CharField(max_length=75)
-    cart_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=0)
+    cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2, default=25)
-    grand_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=0)
+    grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
     cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self): 
@@ -91,17 +101,6 @@ class Cart (models.Model):
 ########################################################################################################################
 
 
-class EcommerceManager(models.Manager):
-
-    def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
-    cart_item_quantity, cart_item_title, cart_item_photo, cart_item_price):
-
-        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
-        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quantity=cart_item_quantity,
-        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
-        item.save(using=self._db)
-
-        return item  
 ########################################################################################################################
 
 
@@ -115,7 +114,7 @@ class CartItem (models.Model):
     cart_item_photo = models.ImageField(blank=True, null=True)
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
-    objects = EcommerceManager()
+    objects = UserProfileManager()
     
     def __str__(self): 
         return str(self.cart_item_title)
@@ -124,9 +123,9 @@ class CartItem (models.Model):
 
 class CheckedCart (models.Model):
     checked_cart_id = models.IntegerField(primary_key=True)
-    cart_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2)
-    grand_total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     user_id = models.IntegerField(default=0)
     checked_cart_selling_date = models.DateField() 
 
@@ -139,7 +138,7 @@ class CheckedCartItem (models.Model):
     checked_cart_item_title = models.CharField(max_length=75)
     checked_cart_item_photo = models.ImageField(blank=True, null=True)
     checked_cart_item_size = models.CharField(max_length=7)
-    checked_cart_item_price = models.DecimalField(max_digits=5, decimal_places=2)
+    checked_cart_item_price = models.DecimalField(max_digits=10, decimal_places=2)
     checked_cart_item_quntity = models.IntegerField(default=1)
     checked_cart = models.ForeignKey(CheckedCart, on_delete=models.CASCADE, blank=True, null=True)
     sales = models.ForeignKey('Sales', on_delete=models.CASCADE, blank=True, null=True)
@@ -182,7 +181,7 @@ class Product (models.Model):
     product_title = models.CharField(max_length=100)
     product_details = models.TextField()
     product_price = models.DecimalField(max_digits=10, decimal_places=2)
-    product_discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    product_discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     product_brand = models.CharField(max_length=75)
     max_quantity = models.IntegerField(default=0)
     product_date_entry = models.DateField()

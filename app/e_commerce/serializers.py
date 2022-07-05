@@ -78,12 +78,12 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = '__all__'
+        fields = ['cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color', 'cart_item_quantity',
+        'cart_item_title', 'cart_item_photo', 'cart_item_price']
 
     def create(self, validated_data):
-        product = models.Product.objects.get(product_title=validated_data['cart_item_product'])
-        user = models.User.objects.get(first_name = validated_data['cart_item_cart'])
-        cart = models.Cart.objects.get(cart_user = user.id)
+        product = models.Product.objects.get(id=validated_data['cart_item_product'].id)
+        cart = models.Cart.objects.get(id = validated_data['cart_item_cart'].id)
         image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
         item_quantity = validated_data['cart_item_quantity']
 
