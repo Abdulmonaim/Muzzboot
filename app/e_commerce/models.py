@@ -86,11 +86,6 @@ class Category (models.Model):
 
 
 class Cart (models.Model):
-    # cart_first_name = models.CharField(max_length=50)
-    # cart_last_name = models.CharField(max_length=50)
-    # cart_email = models.EmailField(max_length=255, unique=True)
-    # cart_mobile = models.CharField(max_length=15)
-    # address = models.CharField(max_length=75)
     cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2, default=25)
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
@@ -98,9 +93,6 @@ class Cart (models.Model):
 
     def __str__(self): 
         return str(self.cart_user)
-########################################################################################################################
-
-
 ########################################################################################################################
 
 
@@ -183,7 +175,7 @@ class Product (models.Model):
     product_price = models.DecimalField(max_digits=10, decimal_places=2)
     product_discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     product_brand = models.CharField(max_length=75)
-    max_quantity = models.IntegerField(default=0)
+    total_quantity = models.IntegerField(default=0)
     product_date_entry = models.DateField()
     product_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     product_category = models.ManyToManyField(Category)

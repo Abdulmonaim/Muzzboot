@@ -2,22 +2,7 @@
 # from wsgiref import validate
 from rest_framework import serializers
 from e_commerce import models
-from django.db import connection
 #########################################################################################################
-
-# instance = models.Cart_item.objects.filter(cart_item_cart=1)
-# cart, total = models.Cart.objects.filter(pk=1)[0], 0
-
-# for i in instance:
-#     x1 = i.cart_item_price
-#     y1 = i.cart_item_quntity
-#     total += x1 * y1
-#     print(total)
-
-# cart.cart_total = total
-# cart.grand_total = cart.shipping_charge + total
-# cart.save()
-# print(cart.cart_total, cart.grand_total)
 
 
 
@@ -85,25 +70,17 @@ class CartItemSerializer(serializers.ModelSerializer):
         product = models.Product.objects.get(id=validated_data['cart_item_product'].id)
         cart = models.Cart.objects.get(id = validated_data['cart_item_cart'].id)
         image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
-        item_quantity = validated_data['cart_item_quantity']
 
         item = models.CartItem.objects.create_item(
             cart_item_product=validated_data['cart_item_product'],
             cart_item_cart=cart,
             cart_item_size=validated_data['cart_item_size'],
             cart_item_color=validated_data['cart_item_color'],
-            cart_item_quantity=item_quantity,
+            cart_item_quantity=validated_data['cart_item_quantity'],
             cart_item_title=validated_data['cart_item_product'],
             cart_item_photo=image.img,
             cart_item_price=product.product_price
-        )
-
-        cart.cart_total += product.product_price * item_quantity
-        if cart.cart_total >= 300:
-            cart.grand_total = cart.cart_total
-        else:
-            cart.grand_total = cart.cart_total + cart.shipping_charge
-        cart.save()       
+        )       
 
         return item
 #########################################################################################################        

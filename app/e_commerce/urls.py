@@ -5,14 +5,14 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('register', views.RegisterViewSet)
-router.register('product', views.Product_ViewSet)
-router.register('review', views.Review_ViewSet)
-router.register('category', views.Category_ViewSet)
-router.register('cart', views.Cart_ViewSet)
-router.register('cart_item', views.Cart_item_ViewSet)
-router.register('images', views.Images_ViewSet)
-router.register('color', views.Color_ViewSet)
-router.register('size', views.Size_ViewSet)
+router.register('product', views.ProductViewSet)
+router.register('review', views.ReviewViewSet)
+router.register('category', views.CategoryViewSet)
+router.register('cart', views.CartViewSet)
+router.register('cart_item', views.CartItemViewSet)
+router.register('image', views.ImageViewSet)
+router.register('color', views.ColorViewSet)
+router.register('size', views.SizeViewSet)
 
 urlpatterns = [
     path('login/', views.UserLoginApiView.as_view()),

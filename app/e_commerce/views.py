@@ -48,7 +48,8 @@ class UserLoginApiView(ObtainAuthToken):
 ##########################################################################################
 
 
-class Product_ViewSet(viewsets.ModelViewSet):
+class ProductViewSet(viewsets.ModelViewSet):
+
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.objects.all()
     authentication_classes = (TokenAuthentication,)
@@ -85,7 +86,8 @@ class Product_ViewSet(viewsets.ModelViewSet):
 ##########################################################################################
 
 
-class Review_ViewSet(viewsets.ModelViewSet):
+class ReviewViewSet(viewsets.ModelViewSet):
+
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
     authentication_classes = (TokenAuthentication,)
@@ -97,42 +99,67 @@ class Review_ViewSet(viewsets.ModelViewSet):
         else:
                 permission_classes = [permissions.UpdateOwnProfile]
         return [permission() for permission in permission_classes]
-    
 ##########################################################################################
 
 
-class Category_ViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
+
     serializer_class = serializers.CategorySerializer
     queryset = models.Category.objects.all()
 ##########################################################################################
 
 
-class Cart_ViewSet(viewsets.ModelViewSet):
+class CartViewSet(viewsets.ModelViewSet):
+
     serializer_class = serializers.CartSerializer
     queryset = models.Cart.objects.all()
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (permissions.UpdateOwnProfile,)
+
+    def retrieve(self, request, pk= None, *args, **kwargs):
+        items = models.CartItem.objects.filter(cart_item_cart=pk)            
+        queryset, total = models.Cart.objects.get(pk=pk), 0
+
+        if len(items) == 0:
+            return Response({'message': "Your Cart is empty"})
+
+        for item in items:
+            total += item.cart_item_price * item.cart_item_quantity
+        
+        queryset.cart_total = total
+
+        if queryset.cart_total >= 300:
+            queryset.grand_total = queryset.cart_total
+        else:
+            queryset.grand_total = queryset.cart_total + queryset.shipping_charge
+    
+        queryset.save()
+        serializer = serializers.CartSerializer(queryset)
+
+        return Response(serializer.data)
 ##########################################################################################
 
 
-class Cart_item_ViewSet(viewsets.ModelViewSet):
+class CartItemViewSet(viewsets.ModelViewSet):
+
     serializer_class = serializers.CartItemSerializer
     queryset = models.CartItem.objects.all()
 ##########################################################################################
 
 
-class Images_ViewSet(viewsets.ModelViewSet):
+class ImageViewSet(viewsets.ModelViewSet):
+
     serializer_class = serializers.ImageSerializer
     queryset = models.Image.objects.all()
 ##########################################################################################
 
 
-class Color_ViewSet(viewsets.ModelViewSet):
+class ColorViewSet(viewsets.ModelViewSet):
+
     serializer_class = serializers.ColorSerializer
     queryset = models.Color.objects.all()
 ##########################################################################################
 
 
-class Size_ViewSet(viewsets.ModelViewSet):
+class SizeViewSet(viewsets.ModelViewSet):
+    
     serializer_class = serializers.SizeSerializer
     queryset = models.Size.objects.all()
