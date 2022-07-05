@@ -5,25 +5,13 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import MaxValueValidator, MinValueValidator
 ########################################################################################################################
 
-class EcommerceManager(models.Manager):
 
-    def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
-    cart_item_quntity, cart_item_title, cart_item_photo, cart_item_price):
-
-        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
-        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quntity=cart_item_quntity,
-        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
-        item.save(using=self._db)
-
-        return item    
-
-
+  
 
 
 
 
 class UserProfileManager(BaseUserManager):
-    
 
     """Manager for user profiles"""
     def create_user(self, first_name, last_name, email, password, mobile='', address=''):
@@ -99,7 +87,21 @@ class Cart (models.Model):
     cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self): 
-        return str(self.cart_total)
+        return str(self.cart_user)
+########################################################################################################################
+
+
+class EcommerceManager(models.Manager):
+
+    def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
+    cart_item_quantity, cart_item_title, cart_item_photo, cart_item_price):
+
+        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
+        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quantity=cart_item_quantity,
+        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
+        item.save(using=self._db)
+
+        return item  
 ########################################################################################################################
 
 
@@ -108,19 +110,15 @@ class CartItem (models.Model):
     cart_item_cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     cart_item_size = models.CharField(max_length=7)
     cart_item_color = models.CharField(max_length=7)
-    cart_item_quntity = models.IntegerField(default=1)
+    cart_item_quantity = models.IntegerField(default=1)
     cart_item_title = models.CharField(max_length=75, blank=True, null=True)
     cart_item_photo = models.ImageField(blank=True, null=True)
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
-    ecommerce = EcommerceManager()
-    objects = models.Manager
+
+    objects = EcommerceManager()
     
     def __str__(self): 
         return str(self.cart_item_title)
-    
-
-    
-
 ########################################################################################################################
 
 

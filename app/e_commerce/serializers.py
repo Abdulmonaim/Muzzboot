@@ -78,29 +78,34 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = ('id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color',
-        'cart_item_quantity', 'cart_item_title', 'cart_item_photo', 'cart_item_price')
+        fields = '__all__'
 
-        def create(self, validated_data):
-            product = models.Product.objects.get(pk=validated_data['cart_item_product'])
-            cart = models.Cart.objects.get(cart_user = validated_data['cart_item_cart'])
-            image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
-            
-            item = models.CartItem.ecommerce.create_item(
-                cart_item_product=validated_data['cart_item_product'],
-                cart_item_cart=cart.id,
-                cart_item_size=validated_data['cart_item_size'],
-                cart_item_color=validated_data['cart_item_color'],
-                cart_item_quntity=validated_data['cart_item_quntity'],
-                cart_item_title=product.product_title,
-                cart_item_photo=image.img,
-                cart_item_price=product.product_price
-            )
-            
-            cart.cart_total += product.cart_item_price * validated_data['cart_item_quntity']
-            cart.save()       
+    def create(self, validated_data):
+        product = models.Product.objects.get(product_title=validated_data['cart_item_product'])
+        user = models.User.objects.get(first_name = validated_data['cart_item_cart'])
+        cart = models.Cart.objects.get(cart_user = user.id)
+        image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
+        item_quantity = validated_data['cart_item_quantity']
 
-            return item
+        item = models.CartItem.objects.create_item(
+            cart_item_product=validated_data['cart_item_product'],
+            cart_item_cart=cart,
+            cart_item_size=validated_data['cart_item_size'],
+            cart_item_color=validated_data['cart_item_color'],
+            cart_item_quantity=item_quantity,
+            cart_item_title=validated_data['cart_item_product'],
+            cart_item_photo=image.img,
+            cart_item_price=product.product_price
+        )
+
+        cart.cart_total += product.product_price * item_quantity
+        if cart.cart_total >= 300:
+            cart.grand_total = cart.cart_total
+        else:
+            cart.grand_total = cart.cart_total + cart.shipping_charge
+        cart.save()       
+
+        return item
 #########################################################################################################        
 
 

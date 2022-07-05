@@ -117,10 +117,7 @@ class Cart_ViewSet(viewsets.ModelViewSet):
 
 class Cart_item_ViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CartItemSerializer
-    queryset = models.CartItem.ecommerce.all()
-
-
-    
+    queryset = models.CartItem.objects.all()
 ##########################################################################################
 
 
