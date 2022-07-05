@@ -8,10 +8,18 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
+class CartManager(models.Manager):
+
+    def create_cart(self, cart_user):
+
+        cart = self.model(cart_user=cart_user)
+        cart.save(using=self._db)
+
+        return cart 
+########################################################################################################################
 
 
-
-class UserProfileManager(BaseUserManager):
+class CartItemManager(models.Manager):
 
     def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
     cart_item_quantity, cart_item_title, cart_item_photo, cart_item_price):
@@ -21,8 +29,11 @@ class UserProfileManager(BaseUserManager):
         cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
         item.save(using=self._db)
 
-        return item  
+        return item 
+########################################################################################################################
 
+
+class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
     def create_user(self, first_name, last_name, email, password, mobile='', address=''):
         """Create a new user profile"""
@@ -34,7 +45,6 @@ class UserProfileManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-
 
     def create_superuser(self, first_name, last_name, email, password):
         """Create and save a new superuser with given details"""
@@ -89,7 +99,10 @@ class Cart (models.Model):
     cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2, default=25)
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
-    cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    items_num = models.IntegerField(default=0)
+    cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, unique=True)
+
+    objects = CartManager()
 
     def __str__(self): 
         return str(self.cart_user)
@@ -106,7 +119,7 @@ class CartItem (models.Model):
     cart_item_photo = models.ImageField(blank=True, null=True)
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
-    objects = UserProfileManager()
+    objects = CartItemManager()
     
     def __str__(self): 
         return str(self.cart_item_title)
@@ -114,11 +127,10 @@ class CartItem (models.Model):
 
 
 class CheckedCart (models.Model):
-    checked_cart_id = models.IntegerField(primary_key=True)
     cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2)
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
-    user_id = models.IntegerField(default=0)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     checked_cart_selling_date = models.DateField() 
 
     def __str__(self): 
@@ -133,7 +145,6 @@ class CheckedCartItem (models.Model):
     checked_cart_item_price = models.DecimalField(max_digits=10, decimal_places=2)
     checked_cart_item_quntity = models.IntegerField(default=1)
     checked_cart = models.ForeignKey(CheckedCart, on_delete=models.CASCADE, blank=True, null=True)
-    sales = models.ForeignKey('Sales', on_delete=models.CASCADE, blank=True, null=True)
     product_id = models.IntegerField(default=0)
         
     def __str__(self): 
@@ -191,7 +202,7 @@ class Review (models.Model):
     review_content = models.TextField()
     review_date = models.DateField()
     review_product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    review_user = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True )
+    review_user = models.ForeignKey('User', on_delete=models.CASCADE, blank=True, null=True, unique=True)
 
     def __str__(self): 
         return str(self.review_user)
@@ -201,13 +212,6 @@ class Review (models.Model):
 class Image (models.Model):
     img = models.ImageField()
     images_product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    images_category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self): 
         return str(self.img)
-########################################################################################################################
-
-
-class Sales(models.Model):
-    sales_user = models.ForeignKey(User,  on_delete=models.CASCADE)
-

@@ -11,7 +11,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'mobile', 'address', 'height',
+        fields = ('first_name', 'last_name', 'email', 'password', 'mobile', 'address', 'height',
         'gender', 'cup_size', 'size_image', 'human_parsing', 'user_size', 'is_staff','followers', 'visitors')
         extra_kwargs = {
             'password': {
@@ -30,6 +30,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             mobile=validated_data['mobile'],
             address=validated_data['address']
         )
+
+        models.Cart.objects.create_cart(user)
 
         return user
 #########################################################################################################
@@ -68,7 +70,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         product = models.Product.objects.get(id=validated_data['cart_item_product'].id)
-        cart = models.Cart.objects.get(id = validated_data['cart_item_cart'].id)
+        cart = models.Cart.objects.get(id=validated_data['cart_item_cart'].id)
         image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
 
         item = models.CartItem.objects.create_item(

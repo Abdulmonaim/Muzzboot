@@ -117,13 +117,15 @@ class CartViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk= None, *args, **kwargs):
         items = models.CartItem.objects.filter(cart_item_cart=pk)            
         queryset, total = models.Cart.objects.get(pk=pk), 0
+        items_num  = len(items)
 
-        if len(items) == 0:
+        if items_num == 0:
             return Response({'message': "Your Cart is empty"})
 
         for item in items:
             total += item.cart_item_price * item.cart_item_quantity
-        
+
+        queryset.items_num = items_num
         queryset.cart_total = total
 
         if queryset.cart_total >= 300:
@@ -132,9 +134,10 @@ class CartViewSet(viewsets.ModelViewSet):
             queryset.grand_total = queryset.cart_total + queryset.shipping_charge
     
         queryset.save()
-        serializer = serializers.CartSerializer(queryset)
+        cart_serializer = serializers.CartSerializer(queryset)
+        item_serializer = serializers.CartItemSerializer(items, many=True)
 
-        return Response(serializer.data)
+        return Response({'cart':cart_serializer.data, 'items': item_serializer.data})
 ##########################################################################################
 
 
