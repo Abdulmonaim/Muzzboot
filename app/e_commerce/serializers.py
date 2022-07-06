@@ -12,7 +12,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ('first_name', 'last_name', 'email', 'password', 'mobile', 'address', 'height',
-        'gender', 'cup_size', 'size_image', 'human_parsing', 'user_size', 'is_staff','followers', 'visitors')
+         'cup_size', 'size_image', 'human_parsing', 'user_size','gender', 'is_staff','followers', 'visitors')
         extra_kwargs = {
             'password': {
                 'write_only': True,
@@ -28,7 +28,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             mobile=validated_data['mobile'],
-            address=validated_data['address']
+            address=validated_data['address'],
+            gender=validated_data['gender'],
+            is_staff=validated_data['is_staff']
         )
 
         models.Cart.objects.create_cart(user)

@@ -35,13 +35,14 @@ class CartItemManager(models.Manager):
 
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
-    def create_user(self, first_name, last_name, email, password, mobile='', address=''):
+    def create_user(self, first_name, last_name, email, password, mobile, address, gender, is_staff):
         """Create a new user profile"""
         if not email:
             raise ValueError('User must have an email address')
 
         email = self.normalize_email(email)
-        user = self.model(first_name=first_name, last_name=last_name, email=email, password=password, mobile=mobile, address=address)
+        user = self.model(first_name=first_name, last_name=last_name, email=email,
+         password=password, mobile=mobile, address=address, gender=gender, is_staff=is_staff)
         user.set_password(password)
         user.save(using=self._db)
         return user
