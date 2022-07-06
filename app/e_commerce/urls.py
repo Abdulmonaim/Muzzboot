@@ -13,6 +13,7 @@ router.register('cart_item', views.CartItemViewSet)
 router.register('image', views.ImageViewSet)
 router.register('color', views.ColorViewSet)
 router.register('size', views.SizeViewSet)
+router.register('quantity', views.QuantityViewSet)
 
 urlpatterns = [
     path('login/', views.UserLoginApiView.as_view()),

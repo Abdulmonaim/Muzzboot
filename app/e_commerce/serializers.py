@@ -119,3 +119,11 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Product
         fields = '__all__'
+#########################################################################################################
+
+
+class QuantitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Quantity
+        fields = ('quantity_size', 'quantity_color')

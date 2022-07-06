@@ -70,19 +70,28 @@ class ProductViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk= None, *args, **kwargs):
         reviews = models.Review.objects.filter(review_product=pk)            
         queryset, total = models.Product.objects.get(pk=pk), 0
+        sizes_colors = models.Quantity.objects.filter(product_id=pk)
+        size, color = [], []
+
+        for i in sizes_colors:
+            size.append(i.quantity_size.size_name)
+            color.append(i.quantity_color.color_name)   
 
         if len(reviews) == 0:
             serializer = serializers.ProductSerializer(queryset)
             return Response(serializer.data)
 
         for review in reviews:
-            total += review.review_rating   
+            total += review.review_rating 
+
         avg = total / len(reviews)
         queryset.product_rating = avg
         queryset.save()
-        serializer = serializers.ProductSerializer(queryset)
 
-        return Response(serializer.data)
+        product_serializer = serializers.ProductSerializer(queryset)
+        sizes_colors_serializer = serializers.QuantitySerializer(sizes_colors, many=True)
+
+        return Response({'product': product_serializer.data, 'sizes': size, 'colors': color})
 ##########################################################################################
 
 
@@ -166,3 +175,10 @@ class SizeViewSet(viewsets.ModelViewSet):
     
     serializer_class = serializers.SizeSerializer
     queryset = models.Size.objects.all()
+##########################################################################################
+
+
+class QuantityViewSet(viewsets.ModelViewSet):
+    
+    serializer_class = serializers.QuantitySerializer
+    queryset = models.Quantity.objects.all()
