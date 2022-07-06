@@ -89,7 +89,6 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset.save()
 
         product_serializer = serializers.ProductSerializer(queryset)
-        sizes_colors_serializer = serializers.QuantitySerializer(sizes_colors, many=True)
 
         return Response({'product': product_serializer.data, 'sizes': size, 'colors': color})
 ##########################################################################################

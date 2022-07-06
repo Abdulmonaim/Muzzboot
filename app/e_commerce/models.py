@@ -60,6 +60,7 @@ class UserProfileManager(BaseUserManager):
 
 
 class User (AbstractBaseUser, PermissionsMixin):
+
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=255, unique=True)
@@ -87,6 +88,7 @@ class User (AbstractBaseUser, PermissionsMixin):
 
 
 class Category (models.Model):
+
     category_title = models.CharField(max_length=75)
     category_gender = models.BooleanField(default=False)
     category_description = models.CharField(max_length=100)
@@ -97,6 +99,7 @@ class Category (models.Model):
 
 
 class Cart (models.Model):
+
     cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2, default=25)
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
@@ -111,14 +114,15 @@ class Cart (models.Model):
 
 
 class CartItem (models.Model):
-    cart_item_product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    cart_item_cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    
     cart_item_size = models.CharField(max_length=7)
     cart_item_color = models.CharField(max_length=7)
     cart_item_quantity = models.IntegerField(default=1)
     cart_item_title = models.CharField(max_length=75, blank=True, null=True)
     cart_item_photo = models.ImageField(blank=True, null=True)
     cart_item_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    cart_item_product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    cart_item_cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 
     objects = CartItemManager()
     
@@ -128,11 +132,12 @@ class CartItem (models.Model):
 
 
 class CheckedCart (models.Model):
+
     cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2)
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     checked_cart_selling_date = models.DateField() 
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self): 
         return str(self.checked_cart_id)
@@ -140,13 +145,14 @@ class CheckedCart (models.Model):
 
 
 class CheckedCartItem (models.Model):
+
     checked_cart_item_title = models.CharField(max_length=75)
     checked_cart_item_photo = models.ImageField(blank=True, null=True)
     checked_cart_item_size = models.CharField(max_length=7)
     checked_cart_item_price = models.DecimalField(max_digits=10, decimal_places=2)
     checked_cart_item_quntity = models.IntegerField(default=1)
+    product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
     checked_cart = models.ForeignKey(CheckedCart, on_delete=models.CASCADE, blank=True, null=True)
-    product_id = models.IntegerField(default=0)
         
     def __str__(self): 
         return self.checked_cart_item_title
@@ -154,6 +160,7 @@ class CheckedCartItem (models.Model):
 
 
 class Size (models.Model):
+
     size_name = models.CharField(max_length=7)
 
     def __str__(self): 
