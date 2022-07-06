@@ -77,15 +77,18 @@ class ProductViewSet(viewsets.ModelViewSet):
             size.append(i.quantity_size.size_name)
             color.append(i.quantity_color.color_name)   
 
-        if len(reviews) == 0:
+        def CustomSerializer(serializer):
 
-            product_serializer = serializers.ProductSerializer(queryset)
             product = dict()
-            product = product_serializer.data
+            product = serializer.data
             product['sizes'] = size
             product['colors'] = color
 
-            return Response(product)
+            return product
+
+        if len(reviews) == 0:
+            product_serializer = serializers.ProductSerializer(queryset)
+            return Response(CustomSerializer(product_serializer))
 
         for review in reviews:
             total += review.review_rating 
@@ -95,12 +98,8 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset.save()
 
         product_serializer = serializers.ProductSerializer(queryset)
-        product = dict()
-        product = product_serializer.data
-        product['sizes'] = size
-        product['colors'] = color
 
-        return Response(product)
+        return Response(CustomSerializer(product_serializer))
 ##########################################################################################
 
 
