@@ -6,6 +6,8 @@ from e_commerce import models
 
 class RegisterSerializer(serializers.ModelSerializer):
     """Serializes a user profile object"""
+    size_image = serializers.ImageField(required=False)
+    human_parsing = serializers.ImageField(required=False)
 
     class Meta:
         model = models.User
