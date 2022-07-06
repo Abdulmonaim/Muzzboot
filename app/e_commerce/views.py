@@ -78,8 +78,14 @@ class ProductViewSet(viewsets.ModelViewSet):
             color.append(i.quantity_color.color_name)   
 
         if len(reviews) == 0:
-            serializer = serializers.ProductSerializer(queryset)
-            return Response(serializer.data)
+
+            product_serializer = serializers.ProductSerializer(queryset)
+            product = dict()
+            product = product_serializer.data
+            product['sizes'] = size
+            product['colors'] = color
+
+            return Response(product)
 
         for review in reviews:
             total += review.review_rating 
@@ -89,8 +95,12 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset.save()
 
         product_serializer = serializers.ProductSerializer(queryset)
+        product = dict()
+        product = product_serializer.data
+        product['sizes'] = size
+        product['colors'] = color
 
-        return Response({'product': product_serializer.data, 'sizes': size, 'colors': color})
+        return Response(product)
 ##########################################################################################
 
 
