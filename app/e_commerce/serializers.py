@@ -1,5 +1,3 @@
-# from pyexpat import model
-# from wsgiref import validate
 from rest_framework import serializers
 from e_commerce import models
 #########################################################################################################

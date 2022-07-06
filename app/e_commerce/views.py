@@ -1,6 +1,4 @@
-# from django.shortcuts import get_object_or_404
-# from rest_framework.decorators import action
-# from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status, filters
 from rest_framework.authentication import TokenAuthentication
@@ -21,6 +19,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
     """Handle creating, creating and updating profiles"""
     serializer_class = serializers.RegisterSerializer
     queryset = models.User.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
     authentication_classes = (TokenAuthentication,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email',)
@@ -52,6 +51,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
     authentication_classes = (TokenAuthentication,)
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     search_fields = ['product_title']
@@ -130,6 +130,7 @@ class CartViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CartSerializer
     queryset = models.Cart.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
 
     def retrieve(self, request, pk= None, *args, **kwargs):
         items = models.CartItem.objects.filter(cart_item_cart=pk)            
@@ -162,6 +163,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CartItemSerializer
     queryset = models.CartItem.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
 ##########################################################################################
 
 
@@ -169,6 +171,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.ImageSerializer
     queryset = models.Image.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
 ##########################################################################################
 
 
