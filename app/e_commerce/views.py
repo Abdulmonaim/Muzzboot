@@ -149,9 +149,10 @@ class CartViewSet(viewsets.ModelViewSet):
         if queryset.cart_total >= 300:
             queryset.grand_total = queryset.cart_total
             queryset.shipping_charge = 0
-            
+
         else:
             queryset.grand_total = queryset.cart_total + queryset.shipping_charge
+            queryset.shipping_charge = 25
     
         queryset.save()
         cart_serializer = serializers.CartSerializer(queryset)
