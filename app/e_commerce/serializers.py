@@ -1,13 +1,11 @@
 from rest_framework import serializers
 from e_commerce import models
-#########################################################################################################
+
 
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     """Serializes a user profile object"""
-    # size_image = serializers.ImageField(required=False)
-    # human_parsing = serializers.ImageField(required=False)
 
     class Meta:
         model = models.User
@@ -37,7 +35,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         models.Cart.objects.create_cart(user)
 
         return user
-#########################################################################################################
+
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -45,7 +43,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Review
         fields = '__all__'
-#########################################################################################################
+
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -53,7 +51,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = '__all__'
-#########################################################################################################
+
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -61,14 +59,14 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cart
         fields = '__all__'
-#########################################################################################################
+
 
 
 class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = ['cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color', 'cart_item_quantity',
+        fields = ['id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color', 'cart_item_quantity',
         'cart_item_title', 'cart_item_photo', 'cart_item_price']
 
     def create(self, validated_data):
@@ -88,7 +86,7 @@ class CartItemSerializer(serializers.ModelSerializer):
         )       
 
         return item
-#########################################################################################################        
+        
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -96,7 +94,7 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Image
         fields = '__all__'
-#########################################################################################################
+
 
 
 class ColorSerializer(serializers.ModelSerializer):
@@ -104,7 +102,7 @@ class ColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Color
         fields = '__all__'
-#########################################################################################################
+
 
 
 class SizeSerializer(serializers.ModelSerializer):
@@ -113,14 +111,14 @@ class SizeSerializer(serializers.ModelSerializer):
         model = models.Size
         fields = '__all__'
 
-#########################################################################################################
+
 
 class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Product
         fields = '__all__'
-#########################################################################################################
+
 
 
 class QuantitySerializer(serializers.ModelSerializer):

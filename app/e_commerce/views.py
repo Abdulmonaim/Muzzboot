@@ -11,7 +11,7 @@ from e_commerce import serializers
 from e_commerce import models
 from e_commerce import permissions
 from e_commerce import filter
-##########################################################################################
+
 
 
 
@@ -33,7 +33,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
         else:
                 permission_classes = [permissions.UpdateOwnProfile]
         return [permission() for permission in permission_classes]
-##########################################################################################
+
 
 
 class UserLoginApiView(ObtainAuthToken):
@@ -44,7 +44,7 @@ class UserLoginApiView(ObtainAuthToken):
         response = super(UserLoginApiView, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         return Response({'id': token.user_id, 'token': token.key})
-##########################################################################################
+
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -100,7 +100,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         product_serializer = serializers.ProductSerializer(queryset)
 
         return Response(CustomSerializer(product_serializer))
-##########################################################################################
+
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -116,14 +116,14 @@ class ReviewViewSet(viewsets.ModelViewSet):
         else:
                 permission_classes = [permissions.UpdateOwnProfile]
         return [permission() for permission in permission_classes]
-##########################################################################################
+
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CategorySerializer
     queryset = models.Category.objects.all()
-##########################################################################################
+
 
 
 class CartViewSet(viewsets.ModelViewSet):
@@ -156,7 +156,7 @@ class CartViewSet(viewsets.ModelViewSet):
         item_serializer = serializers.CartItemSerializer(items, many=True)
 
         return Response({'cart':cart_serializer.data, 'items': item_serializer.data})
-##########################################################################################
+
 
 
 class CartItemViewSet(viewsets.ModelViewSet):
@@ -164,7 +164,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CartItemSerializer
     queryset = models.CartItem.objects.all()
     parser_classes = (MultiPartParser, FormParser)
-##########################################################################################
+
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -172,21 +172,21 @@ class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ImageSerializer
     queryset = models.Image.objects.all()
     parser_classes = (MultiPartParser, FormParser)
-##########################################################################################
+
 
 
 class ColorViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.ColorSerializer
     queryset = models.Color.objects.all()
-##########################################################################################
+
 
 
 class SizeViewSet(viewsets.ModelViewSet):
     
     serializer_class = serializers.SizeSerializer
     queryset = models.Size.objects.all()
-##########################################################################################
+
 
 
 class QuantityViewSet(viewsets.ModelViewSet):

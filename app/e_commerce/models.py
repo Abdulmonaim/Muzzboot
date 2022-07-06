@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import MaxValueValidator, MinValueValidator
-########################################################################################################################
+
 
 
 
@@ -16,7 +16,7 @@ class CartManager(models.Manager):
         cart.save(using=self._db)
 
         return cart 
-########################################################################################################################
+
 
 
 class CartItemManager(models.Manager):
@@ -30,7 +30,7 @@ class CartItemManager(models.Manager):
         item.save(using=self._db)
 
         return item 
-########################################################################################################################
+
 
 
 class UserProfileManager(BaseUserManager):
@@ -56,7 +56,7 @@ class UserProfileManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
-########################################################################################################################
+
 
 
 class User (AbstractBaseUser, PermissionsMixin):
@@ -84,7 +84,7 @@ class User (AbstractBaseUser, PermissionsMixin):
 
     def __str__(self): 
         return self.first_name
-########################################################################################################################
+
 
 
 class Category (models.Model):
@@ -95,7 +95,7 @@ class Category (models.Model):
 
     def __str__(self): 
         return self.category_title
-########################################################################################################################
+
 
 
 class Cart (models.Model):
@@ -110,7 +110,7 @@ class Cart (models.Model):
 
     def __str__(self): 
         return str(self.cart_user)
-########################################################################################################################
+
 
 
 class CartItem (models.Model):
@@ -128,7 +128,7 @@ class CartItem (models.Model):
     
     def __str__(self): 
         return str(self.cart_item_title)
-########################################################################################################################
+
 
 
 class CheckedCart (models.Model):
@@ -141,7 +141,7 @@ class CheckedCart (models.Model):
 
     def __str__(self): 
         return str(self.checked_cart_id)
-########################################################################################################################
+
 
 
 class CheckedCartItem (models.Model):
@@ -156,7 +156,7 @@ class CheckedCartItem (models.Model):
         
     def __str__(self): 
         return self.checked_cart_item_title
-########################################################################################################################
+
 
 
 class Size (models.Model):
@@ -165,7 +165,7 @@ class Size (models.Model):
 
     def __str__(self): 
         return self.size_name
-########################################################################################################################
+
 
 
 class Color (models.Model):
@@ -173,7 +173,7 @@ class Color (models.Model):
 
     def __str__(self): 
         return self.color_name
-########################################################################################################################
+
 
 
 class Quantity (models.Model):
@@ -185,7 +185,7 @@ class Quantity (models.Model):
     
     def __str__(self): 
         return str(self.quantity)
-########################################################################################################################
+
 
 
 class Product (models.Model):
@@ -202,7 +202,7 @@ class Product (models.Model):
 
     def __str__(self): 
         return self.product_title
-########################################################################################################################
+
 
 
 class Review (models.Model):
@@ -214,7 +214,7 @@ class Review (models.Model):
 
     def __str__(self): 
         return str(self.review_user)
-########################################################################################################################
+
 
 
 class Image (models.Model):
