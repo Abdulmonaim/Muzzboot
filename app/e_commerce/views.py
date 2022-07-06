@@ -163,7 +163,6 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CartItemSerializer
     queryset = models.CartItem.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
 
 
 
