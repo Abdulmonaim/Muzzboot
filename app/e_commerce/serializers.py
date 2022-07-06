@@ -30,7 +30,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             mobile=validated_data['mobile'],
             address=validated_data['address'],
             gender=validated_data['gender'],
-            is_staff=validated_data['is_staff']
+            is_staff=validated_data['is_staff'],
+            size_image=validated_data['size_image']
         )
 
         models.Cart.objects.create_cart(user)
@@ -127,3 +128,4 @@ class QuantitySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Quantity
         fields = ('quantity_size', 'quantity_color')
+        
