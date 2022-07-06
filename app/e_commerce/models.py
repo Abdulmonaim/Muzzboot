@@ -103,6 +103,8 @@ class Cart (models.Model):
     cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
     shipping_charge = models.DecimalField(max_digits=5, decimal_places=2, default=25)
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True, default=0)
+    promo_code = models.CharField(max_length=10, default="NotCode")
+    promo_counter = models.IntegerField(default=0)
     items_num = models.IntegerField(default=0)
     cart_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, unique=True)
 
