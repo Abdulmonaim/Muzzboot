@@ -73,18 +73,23 @@ class ProductViewSet(viewsets.ModelViewSet):
         reviews = models.Review.objects.filter(review_product=pk)            
         queryset, total = models.Product.objects.get(pk=pk), 0
         sizes_colors = models.Quantity.objects.filter(product_id=pk)
+        images = models.Image.objects.filter(images_product=pk)
         size, color = [], []
+
+
 
         for i in sizes_colors:
             size.append(i.quantity_size.size_name)
             color.append(i.quantity_color.color_name)   
 
-        def CustomSerializer(serializer):
+        def CustomSerializer(serializer0, serializer1):
 
             product = dict()
-            product = serializer.data
+            product = serializer0.data
             product['sizes'] = size
             product['colors'] = color
+            image = serializer1.data
+            product['images'] = image
 
             return product
 
@@ -100,8 +105,9 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset.save()
 
         product_serializer = serializers.ProductSerializer(queryset)
+        image_serializer = serializers.ImageSerializer(images)
 
-        return Response(CustomSerializer(product_serializer))
+        return Response(CustomSerializer(product_serializer, image_serializer))
 
 
 
