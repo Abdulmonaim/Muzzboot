@@ -132,7 +132,6 @@ class CartViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CartSerializer
     queryset = models.Cart.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
 
     def retrieve(self, request, pk= None, *args, **kwargs):
         items = models.CartItem.objects.filter(cart_item_cart=pk)            
