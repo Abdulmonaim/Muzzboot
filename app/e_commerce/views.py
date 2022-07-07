@@ -95,7 +95,8 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         if len(reviews) == 0:
             product_serializer = serializers.ProductSerializer(queryset)
-            return Response(CustomSerializer(product_serializer))
+            image_serializer = serializers.ImageSerializer(images)
+            return Response(CustomSerializer(product_serializer, image_serializer))
 
         for review in reviews:
             total += review.review_rating 
@@ -143,9 +144,6 @@ class CartViewSet(viewsets.ModelViewSet):
         items = models.CartItem.objects.filter(cart_item_cart=pk)            
         queryset, total = models.Cart.objects.get(pk=pk), 0
         items_num  = len(items)
-
-        if items_num == 0:
-            return Response({'message': "Your Cart is empty"})
 
         for item in items:
             total += item.cart_item_price * item.cart_item_quantity
