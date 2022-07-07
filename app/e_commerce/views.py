@@ -144,6 +144,9 @@ class CartViewSet(viewsets.ModelViewSet):
         queryset, total = models.Cart.objects.get(pk=pk), 0
         items_num  = len(items)
 
+        if queryset.promo_code == "Wessam" and queryset.promo_counter == 1:
+            return True
+
         for item in items:
             total += item.cart_item_price * item.cart_item_quantity
 
