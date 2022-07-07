@@ -150,17 +150,14 @@ class CartViewSet(viewsets.ModelViewSet):
         if queryset.cart_total >= 300:
             queryset.grand_total = queryset.cart_total
             queryset.shipping_charge = 0
-            if queryset.promo_code == "Wessam" and queryset.promo_counter == 0:
-                queryset.grand_total = total / 2
-                queryset.promo_counter = 1
 
         else:
             queryset.grand_total = queryset.cart_total + queryset.shipping_charge
             queryset.shipping_charge = 25
-            if queryset.promo_code == "Wessam" and queryset.promo_counter == 0:
-                queryset.grand_total = (total + 25) / 2
-                queryset.promo_counter = 1
 
+        if queryset.promo_code == "Wessam" and queryset.promo_counter == 0:
+            queryset.grand_total = queryset.grand_total / 2
+            queryset.promo_counter = 1
     
         queryset.save()
         cart_serializer = serializers.CartSerializer(queryset)
