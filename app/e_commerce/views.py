@@ -43,7 +43,9 @@ class UserLoginApiView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(UserLoginApiView, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
-        return Response({'id': token.user_id, 'token': token.key})
+        user = models.User.objects.get(id=token.user_id)
+        cart = models.Cart.objects.get(cart_user=user)
+        return Response({'id': token.user_id,'cart': cart.id, 'token': token.key})
 
 
 
