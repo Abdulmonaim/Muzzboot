@@ -35,7 +35,7 @@ class CartItemManager(models.Manager):
 
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
-    def create_user(self, first_name, last_name, email, password, mobile, address, gender, is_staff, size_image):
+    def create_user(self, first_name, last_name, email, password, mobile ='', address='', gender=True, is_staff=False, size_image=''):
         """Create a new user profile"""
         if not email:
             raise ValueError('User must have an email address')
@@ -76,6 +76,7 @@ class User (AbstractBaseUser, PermissionsMixin):
     user_size = models.CharField(max_length=7, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
     gender = models.BooleanField(default=False)
+    user_model = models.TextField(blank=True, null=True)
 
     objects = UserProfileManager()
 
@@ -201,6 +202,7 @@ class Product (models.Model):
     product_rating = models.DecimalField(max_digits=5, decimal_places=1, default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
     product_category = models.ManyToManyField(Category)
     product_vendor = models.ManyToManyField(User)
+    product_model = models.TextField(blank=True, null=True)
 
     def __str__(self): 
         return self.product_title
