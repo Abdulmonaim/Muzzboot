@@ -145,7 +145,9 @@ class CartViewSet(viewsets.ModelViewSet):
         items_num  = len(items)
 
         if queryset.promo_code == "Wessam" and queryset.promo_counter == 1:
-            return True
+            cart_serializer = serializers.CartSerializer(queryset)
+            item_serializer = serializers.CartItemSerializer(items, many=True)
+            return Response({'cart':cart_serializer.data, 'items': item_serializer.data})
 
         for item in items:
             total += item.cart_item_price * item.cart_item_quantity
