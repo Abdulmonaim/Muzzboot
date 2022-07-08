@@ -116,6 +116,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
     authentication_classes = (TokenAuthentication,)
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['review_product', 'review_user']
 
     def get_permissions(self):
 
@@ -124,6 +126,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
         else:
                 permission_classes = [permissions.UpdateOwnProfile]
         return [permission() for permission in permission_classes]
+        
 
 
 
