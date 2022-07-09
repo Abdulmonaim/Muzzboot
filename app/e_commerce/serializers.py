@@ -129,10 +129,10 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 
-# class CartItemSerializer(serializers.ModelSerializer):
+# class CheckedCartSerializer(serializers.ModelSerializer):
 
 #     class Meta:
-#         model = models.CartItem
+#         model = models.CheckedCart
 #         fields = ['id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color', 'cart_item_quantity',
 #         'cart_item_title', 'cart_item_photo', 'cart_item_price']
 
