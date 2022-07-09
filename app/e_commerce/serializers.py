@@ -125,5 +125,5 @@ class QuantitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Quantity
-        fields = ('quantity_size', 'quantity_color')
+        fields = '__all__'
         
