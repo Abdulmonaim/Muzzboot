@@ -31,6 +31,18 @@ class CartItemManager(models.Manager):
 
         return item 
 
+class CheckedCartManager(models.Manager):
+
+    def checkout(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
+    cart_item_quantity, cart_item_title, cart_item_photo, cart_item_price):
+
+        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
+        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quantity=cart_item_quantity,
+        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
+        item.save(using=self._db)
+
+        return item 
+
 
 
 class UserProfileManager(BaseUserManager):
@@ -141,6 +153,8 @@ class CheckedCart (models.Model):
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     checked_cart_selling_date = models.DateField() 
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+
+    objects = CheckedCartManager()
 
     def __str__(self): 
         return str(self.checked_cart_id)

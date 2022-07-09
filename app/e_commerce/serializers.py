@@ -51,41 +51,6 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = '__all__'
-
-
-
-class CartSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.Cart
-        fields = '__all__'
-
-
-
-class CartItemSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.CartItem
-        fields = ['id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color', 'cart_item_quantity',
-        'cart_item_title', 'cart_item_photo', 'cart_item_price']
-
-    def create(self, validated_data):
-        product = models.Product.objects.get(id=validated_data['cart_item_product'].id)
-        cart = models.Cart.objects.get(id=validated_data['cart_item_cart'].id)
-        image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
-
-        item = models.CartItem.objects.create_item(
-            cart_item_product=validated_data['cart_item_product'],
-            cart_item_cart=cart,
-            cart_item_size=validated_data['cart_item_size'],
-            cart_item_color=validated_data['cart_item_color'],
-            cart_item_quantity=validated_data['cart_item_quantity'],
-            cart_item_title=validated_data['cart_item_product'],
-            cart_item_photo=image.img,
-            cart_item_price=product.product_price
-        )       
-
-        return item
         
 
 
@@ -126,4 +91,65 @@ class QuantitySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Quantity
         fields = '__all__'
-        
+
+
+
+class CartSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Cart
+        fields = '__all__'
+
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.CartItem
+        fields = ['id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color', 'cart_item_quantity',
+        'cart_item_title', 'cart_item_photo', 'cart_item_price']
+
+    def create(self, validated_data):
+        product = models.Product.objects.get(id=validated_data['cart_item_product'].id)
+        cart = models.Cart.objects.get(id=validated_data['cart_item_cart'].id)
+        image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
+
+        item = models.CartItem.objects.create_item(
+            cart_item_product=validated_data['cart_item_product'],
+            cart_item_cart=cart,
+            cart_item_size=validated_data['cart_item_size'],
+            cart_item_color=validated_data['cart_item_color'],
+            cart_item_quantity=validated_data['cart_item_quantity'],
+            cart_item_title=validated_data['cart_item_product'],
+            cart_item_photo=image.img,
+            cart_item_price=product.product_price
+        )       
+
+        return item
+
+
+
+# class CartItemSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = models.CartItem
+#         fields = ['id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color', 'cart_item_quantity',
+#         'cart_item_title', 'cart_item_photo', 'cart_item_price']
+
+#     def create(self, validated_data):
+#         product = models.Product.objects.get(id=validated_data['cart_item_product'].id)
+#         cart = models.Cart.objects.get(id=validated_data['cart_item_cart'].id)
+#         image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
+
+#         item = models.CartItem.objects.create_item(
+#             cart_item_product=validated_data['cart_item_product'],
+#             cart_item_cart=cart,
+#             cart_item_size=validated_data['cart_item_size'],
+#             cart_item_color=validated_data['cart_item_color'],
+#             cart_item_quantity=validated_data['cart_item_quantity'],
+#             cart_item_title=validated_data['cart_item_product'],
+#             cart_item_photo=image.img,
+#             cart_item_price=product.product_price
+#         )       
+
+#         return item
