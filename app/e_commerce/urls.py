@@ -14,6 +14,8 @@ router.register('image', views.ImageViewSet)
 router.register('color', views.ColorViewSet)
 router.register('size', views.SizeViewSet)
 router.register('quantity', views.QuantityViewSet)
+router.register('checked_cart', views.CheckedCartViewSet)
+router.register('checked_cart_item', views.CheckedCartItemViewSet)
 
 urlpatterns = [
     path('login/', views.UserLoginApiView.as_view()),

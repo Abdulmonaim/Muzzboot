@@ -18,7 +18,6 @@ class CartManager(models.Manager):
         return cart 
 
 
-
 class CartItemManager(models.Manager):
 
     def create_item(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
@@ -31,18 +30,26 @@ class CartItemManager(models.Manager):
 
         return item 
 
+
 class CheckedCartManager(models.Manager):
 
-    def checkout(self, cart_item_product, cart_item_cart, cart_item_size, cart_item_color,
-    cart_item_quantity, cart_item_title, cart_item_photo, cart_item_price):
+    def checkout(self, cart_total, shipping_charge, checked_cart_selling_date, user_id):
 
-        item = self.model(cart_item_product=cart_item_product, cart_item_cart=cart_item_cart,
-        cart_item_size=cart_item_size, cart_item_color=cart_item_color, cart_item_quantity=cart_item_quantity,
-        cart_item_title=cart_item_title, cart_item_photo=cart_item_photo, cart_item_price=cart_item_price)
+        checked_cart = self.model(cart_total=cart_total, shipping_charge=shipping_charge,
+        checked_cart_selling_date=checked_cart_selling_date, user_id=user_id)
+        checked_cart.save(using=self._db)
+
+        return checked_cart 
+
+    def create_item(self, checked_cart_item_title, checked_cart_item_size, checked_cart_item_price,
+    checked_cart_item_quntity, checked_cart_item_photo, product_id, checked_cart):
+
+        item = self.model(checked_cart_item_title=checked_cart_item_title, checked_cart_item_size=checked_cart_item_size,
+        checked_cart_item_price=checked_cart_item_price, checked_cart_item_quntity=checked_cart_item_quntity,
+        checked_cart_item_photo=checked_cart_item_photo, product_id=product_id, checked_cart=checked_cart)
         item.save(using=self._db)
 
-        return item 
-
+        return item
 
 
 class UserProfileManager(BaseUserManager):
@@ -170,7 +177,9 @@ class CheckedCartItem (models.Model):
     checked_cart_item_quntity = models.IntegerField(default=1)
     product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
     checked_cart = models.ForeignKey(CheckedCart, on_delete=models.CASCADE, blank=True, null=True)
-        
+    
+    objects = CheckedCartManager()
+
     def __str__(self): 
         return self.checked_cart_item_title
 

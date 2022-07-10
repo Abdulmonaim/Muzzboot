@@ -211,3 +211,15 @@ class QuantityViewSet(viewsets.ModelViewSet):
     
     serializer_class = serializers.QuantitySerializer
     queryset = models.Quantity.objects.all()
+    
+
+class CheckedCartViewSet(viewsets.ModelViewSet):
+
+    serializer_class = serializers.CheckedCartSerializer
+    queryset = models.CheckedCart.objects.all()
+
+
+class CheckedCartItemViewSet(viewsets.ModelViewSet):
+
+    serializer_class = serializers.CheckedCartItemSerializer
+    queryset = models.CheckedCartItem.objects.all()

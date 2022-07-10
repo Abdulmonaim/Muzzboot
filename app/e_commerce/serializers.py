@@ -129,27 +129,38 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 
-# class CheckedCartSerializer(serializers.ModelSerializer):
+class CheckedCartSerializer(serializers.ModelSerializer):
 
-#     class Meta:
-#         model = models.CheckedCart
-#         fields = ['id', 'cart_item_product', 'cart_item_cart', 'cart_item_size', 'cart_item_color', 'cart_item_quantity',
-#         'cart_item_title', 'cart_item_photo', 'cart_item_price']
+    class Meta:
+        model = models.CheckedCart
+        fields = ['id', 'cart_total', 'shipping_charge', 'checked_cart_selling_date', 'user_id']
 
-#     def create(self, validated_data):
-#         product = models.Product.objects.get(id=validated_data['cart_item_product'].id)
-#         cart = models.Cart.objects.get(id=validated_data['cart_item_cart'].id)
-#         image = models.Image.objects.filter(images_product=validated_data['cart_item_product'])[0]
+    def create(self, validated_data):
+        cart = models.Cart.objects.get(cart_user=validated_data['user_id'])
+        items = models.CartItem.objects.filter(cart_item_cart=cart) 
 
-#         item = models.CartItem.objects.create_item(
-#             cart_item_product=validated_data['cart_item_product'],
-#             cart_item_cart=cart,
-#             cart_item_size=validated_data['cart_item_size'],
-#             cart_item_color=validated_data['cart_item_color'],
-#             cart_item_quantity=validated_data['cart_item_quantity'],
-#             cart_item_title=validated_data['cart_item_product'],
-#             cart_item_photo=image.img,
-#             cart_item_price=product.product_price
-#         )       
+        checked_cart0 = models.CheckedCart.objects.checkout(
+            cart_total=validated_data['cart_total'],
+            shipping_charge=validated_data['shipping_charge'],
+            checked_cart_selling_date=validated_data['checked_cart_selling_date'],
+            user_id=validated_data['user_id']
+        )     
 
-#         return item
+        for item in items:
+            models.CheckedCartItem.objects.create_item(
+            checked_cart_item_title=item.cart_item_title,
+            checked_cart_item_size=item.cart_item_size,
+            checked_cart_item_price=item.cart_item_price,
+            checked_cart_item_quntity=item.cart_item_quantity,
+            checked_cart_item_photo=item.cart_item_photo,
+            product_id=item.cart_item_product,
+            checked_cart= checked_cart0
+        )     
+
+        return checked_cart0
+
+class CheckedCartItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.CheckedCartItem
+        fields = '__all__'
