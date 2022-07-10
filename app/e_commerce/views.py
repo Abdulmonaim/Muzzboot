@@ -238,7 +238,7 @@ class CheckedCartViewSet(viewsets.ModelViewSet):
     queryset = models.CheckedCart.objects.all()
 
     def list(self, request, pk= None, *args, **kwargs):
-        cart_checkout = models.CheckedCart.objects.filter(user_id=request._params.get('user_id'))
+        cart_checkout = models.CheckedCart.objects.filter(user_id=request.query_params['user_id'])
         carts = []
 
         for cart in cart_checkout:
