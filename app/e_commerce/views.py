@@ -237,14 +237,18 @@ class CheckedCartViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CheckedCartSerializer
     queryset = models.CheckedCart.objects.all()
 
-    def retrieve(self, request, pk= None, *args, **kwargs):
-        cart_checkout = models.CheckedCart.objects.get(user_id=pk)
-        items = models.CheckedCartItem.objects.filter(checked_cart=cart_checkout)            
+    def list(self, request, pk= None, *args, **kwargs):
+        cart_checkout = models.CheckedCart.objects.filter(user_id=request._params.get('user_id'))
+        carts = []
 
-        cart_serializer = serializers.CheckedCartSerializer(cart_checkout)
-        item_serializer = serializers.CheckedCartItemSerializer(items, many=True)
+        for cart in cart_checkout:
+            items = models.CheckedCartItem.objects.filter(checked_cart=cart)
+            cart_serializer = serializers.CheckedCartSerializer(cart)
+            item_serializer = serializers.CheckedCartItemSerializer(items, many=True)
+            cart_res = {'cart':cart_serializer.data, 'items': item_serializer.data}
+            carts.append(cart_res)         
 
-        return Response({'cart':cart_serializer.data, 'items': item_serializer.data})
+        return Response(carts)
 
 
 class CheckedCartItemViewSet(viewsets.ModelViewSet):
