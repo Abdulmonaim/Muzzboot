@@ -164,7 +164,7 @@ class CheckedCart (models.Model):
     objects = CheckedCartManager()
 
     def __str__(self): 
-        return str(self.checked_cart_id)
+        return str(self.checked_cart_selling_date)
 
 
 

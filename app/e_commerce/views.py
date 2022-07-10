@@ -109,6 +109,25 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         return Response(CustomSerializer(product_serializer))
 
+    # def list(self, request, pk= None, *args, **kwargs):          
+    #     queryset = models.Product.objects.all()
+    #     images = models.Image.objects.filter(images_product=pk)
+
+    #     for i in images:
+    #         image.append(str(i.img))  
+
+    #     def CustomSerializer(serializer):
+
+    #         product = dict()
+    #         product = serializer.data
+    #         product['image'] = image
+
+    #         return product
+
+    #     product_serializer = serializers.ProductSerializer(queryset)
+
+    #     return Response(CustomSerializer(product_serializer))
+
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

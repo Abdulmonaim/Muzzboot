@@ -139,7 +139,7 @@ class CheckedCartSerializer(serializers.ModelSerializer):
         cart = models.Cart.objects.get(cart_user=validated_data['user_id'])
         items = models.CartItem.objects.filter(cart_item_cart=cart) 
 
-        checked_cart0 = models.CheckedCart.objects.checkout(
+        cart_checkout = models.CheckedCart.objects.checkout(
             cart_total=validated_data['cart_total'],
             shipping_charge=validated_data['shipping_charge'],
             checked_cart_selling_date=validated_data['checked_cart_selling_date'],
@@ -154,10 +154,10 @@ class CheckedCartSerializer(serializers.ModelSerializer):
             checked_cart_item_quntity=item.cart_item_quantity,
             checked_cart_item_photo=item.cart_item_photo,
             product_id=item.cart_item_product,
-            checked_cart= checked_cart0
+            checked_cart= cart_checkout
         )     
 
-        return checked_cart0
+        return cart_checkout
 
 class CheckedCartItemSerializer(serializers.ModelSerializer):
 
