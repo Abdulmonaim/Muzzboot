@@ -6,11 +6,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from e_commerce import serializers
 from e_commerce import models
 from e_commerce import permissions
 from e_commerce import filter
+
 
 
 
@@ -34,6 +36,9 @@ class RegisterViewSet(viewsets.ModelViewSet):
                 permission_classes = [permissions.UpdateOwnProfile]
         return [permission() for permission in permission_classes]
 
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 6
 
 
 class UserLoginApiView(ObtainAuthToken):
@@ -59,6 +64,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     search_fields = ['product_title']
     filter_class = filter.ProductFilter
     ordering_fields = ['product_price']
+    pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
 
