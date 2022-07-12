@@ -1,4 +1,4 @@
-version: '3.10'
+version: '3.9'
 
 services:
   app:
@@ -15,7 +15,7 @@ services:
       - ./data/web:/vol/web
     environment:
       - SECRET_KEY=qazwsx123456
-      - DEBUG=0
+      - DEBUG=1
       - DB_HOST=db
       - DB_NAME=prova
       - DB_USER=abdulmonaim
