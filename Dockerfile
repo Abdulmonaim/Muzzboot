@@ -1,4 +1,4 @@
-FROM python:3.10-buster
+FROM python:3.9-alpine3.13
 LABEL maintainer="Ahmad Abdulmonaim"
 
 ENV PYTHONUNBUFFERED 1
