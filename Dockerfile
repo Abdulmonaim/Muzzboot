@@ -1,5 +1,5 @@
 FROM python:3.10-alpine3.16
-LABEL maintainer="Ahmad Abdulmonaim"
+LABEL maintainer="AhmadAbdulmonaim"
 
 ENV PYTHONUNBUFFERED 1
 
@@ -28,4 +28,4 @@ ENV PATH="/scripts:/py/bin:$PATH"
 
 USER app
 
-CMD ["run.sh"] 
+CMD ["run.sh"]
