@@ -15,7 +15,7 @@ services:
       - ./data/web:/vol/web
     environment:
       - SECRET_KEY=qazwsx123456
-      - DEBUG=1
+      - DEBUG=0
       - DB_HOST=db
       - DB_NAME=prova
       - DB_USER=abdulmonaim
