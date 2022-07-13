@@ -80,7 +80,14 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset, total = models.Product.objects.get(pk=pk), 0
         sizes_colors = models.Quantity.objects.filter(product_id=pk)
         images = models.Image.objects.filter(images_product=pk)
-        size, color, image = [], [], []
+        quantites = models.Quantity.objects.filter(product_id=pk)
+        size, color, image, total_quantities = [], [], [], 0
+
+        for quantity in quantites:
+            total_quantities += quantity.quantity 
+            
+        queryset.total_quantity = total_quantities
+        
 
 
         for i in sizes_colors:
@@ -112,6 +119,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset.save()
 
         product_serializer = serializers.ProductSerializer(queryset)
+
 
         return Response(CustomSerializer(product_serializer))
 
@@ -160,12 +168,29 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CategorySerializer
     queryset = models.Category.objects.all()
 
+    def get_permissions(self):
+
+        if self.action == 'retrieve' or self.action == 'list':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
 
 
 class CartViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CartSerializer
     queryset = models.Cart.objects.all()
+
+    def get_permissions(self):
+
+        if self.action == 'list':
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
 
     def retrieve(self, request, pk= None, *args, **kwargs):
         items = models.CartItem.objects.filter(cart_item_cart=pk)            
@@ -207,7 +232,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CartItemSerializer
     queryset = models.CartItem.objects.all()
-
+    permission_classes = [IsAuthenticated]
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -216,6 +241,13 @@ class ImageViewSet(viewsets.ModelViewSet):
     queryset = models.Image.objects.all()
     parser_classes = (MultiPartParser, FormParser)
 
+    def get_permissions(self):
+
+        if self.action == 'retrieve' or self.action == 'list':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 
 class ColorViewSet(viewsets.ModelViewSet):
@@ -223,6 +255,13 @@ class ColorViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ColorSerializer
     queryset = models.Color.objects.all()
 
+    def get_permissions(self):
+
+        if self.action == 'retrieve' or self.action == 'list':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 
 class SizeViewSet(viewsets.ModelViewSet):
@@ -230,18 +269,44 @@ class SizeViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.SizeSerializer
     queryset = models.Size.objects.all()
 
+    def get_permissions(self):
+
+        if self.action == 'retrieve' or self.action == 'list':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 
 class QuantityViewSet(viewsets.ModelViewSet):
     
     serializer_class = serializers.QuantitySerializer
     queryset = models.Quantity.objects.all()
-    
+
+    def get_permissions(self):
+
+        if self.action == 'retrieve' or self.action == 'list':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+
+
 
 class CheckedCartViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CheckedCartSerializer
     queryset = models.CheckedCart.objects.all()
+
+    def get_permissions(self):
+
+        if self.action == 'retrieve' or self.action == 'list':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
 
     def list(self, request, pk= None, *args, **kwargs):
         cart_checkout = models.CheckedCart.objects.filter(user_id=request.query_params['user_id'])
@@ -261,3 +326,11 @@ class CheckedCartItemViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.CheckedCartItemSerializer
     queryset = models.CheckedCartItem.objects.all()
+
+    def get_permissions(self):
+
+        if self.action == 'retrieve' or self.action == 'list' or self.action == 'create':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]

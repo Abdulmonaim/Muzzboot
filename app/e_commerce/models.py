@@ -156,11 +156,9 @@ class CartItem (models.Model):
 class CheckedCart (models.Model):
 
     cart_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
-    shipping_charge = models.DecimalField(max_digits=5, decimal_places=2)
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     checked_cart_selling_date = models.DateField() 
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-
     objects = CheckedCartManager()
 
     def __str__(self): 
